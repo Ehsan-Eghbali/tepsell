@@ -18,7 +18,7 @@ const fireBaseBackend = getFirebaseBackend();
 function* loginUser(action) {
   try {
     const response = yield call(axios.post, action.payload.apiUrl, {
-      username: action.payload.email,
+      email: action.payload.email,
       password: action.payload.password,
     });
     const token = response.data.token; // Adjust the key according to your API response
