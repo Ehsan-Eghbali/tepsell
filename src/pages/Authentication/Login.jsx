@@ -25,10 +25,11 @@ import {
 } from "reactstrap";
 
 // actions
-import { loginUser, socialLogin } from "../../store/actions";
+import {socialLogin } from "../../store/actions";
 
 // import images
 import Pegah111 from "../../assets/images/Pegah111.png";
+import {LOGIN_USER} from "../../store/auth/login/actionTypes";
 
 const Login = (props) => {
   // تنظیم عنوان صفحه
@@ -54,7 +55,15 @@ const Login = (props) => {
       password: Yup.string().required("لطفا رمز عبور خود را وارد کنید"),
     }),
     onSubmit: (values) => {
-      dispatch(loginUser(values, props.router.navigate, API_URL));
+      dispatch({
+        type: LOGIN_USER,
+        payload: {
+          email: values.email,
+          password: values.password,
+          apiUrl: API_URL,
+          navigate: props.router.navigate,
+        },
+      });
     },
   });
 

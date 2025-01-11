@@ -20,7 +20,8 @@ export const loginUser = (user, navigate, API_URL) => {
 
       // ذخیره اطلاعات کاربر در Redux
       dispatch({ type: LOGIN_SUCCESS, payload: response.data });
-
+      const token = response.data.token;
+      localStorage.setItem("authToken", token);
       // هدایت کاربر به صفحه داشبورد
       navigate("/dashboard");
     } catch (error) {

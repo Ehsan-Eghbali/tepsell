@@ -1,7 +1,7 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 
 // Login Redux States
-import { LOGIN_USER, LOGOUT_USER, SOCIAL_LOGIN } from "./actionTypes";
+import {API_ERROR, LOGIN_SUCCESS, LOGIN_USER, LOGOUT_USER, SOCIAL_LOGIN} from "./actionTypes";
 import { apiError, loginSuccess, logoutUserSuccess } from "./actions";
 
 //Include Both Helper File with needed methods
@@ -11,36 +11,29 @@ import {
   postJwtLogin,
   postSocialLogin,
 } from "../../../helpers/fakebackend_helper";
+import axios from "axios";
 
 const fireBaseBackend = getFirebaseBackend();
 
-function* loginUser({ payload: { user, history } }) {
+function* loginUser(action) {
   try {
-    if (import.meta.env.VITE_APP_DEFAULTAUTH === "firebase") {
-      const response = yield call(
-        fireBaseBackend.loginUser,
-        user.email,
-        user.password
-      );
-      yield put(loginSuccess(response));
-    } else if (import.meta.env.VITE_APP_DEFAULTAUTH === "jwt") {
-      const response = yield call(postJwtLogin, {
-        email: user.email,
-        password: user.password,
-      });
-      localStorage.setItem("authUser", JSON.stringify(response));
-      yield put(loginSuccess(response));
-    } else if (import.meta.env.VITE_APP_DEFAULTAUTH === "fake") {
-      const response = yield call(postFakeLogin, {
-        email: user.email,
-        password: user.password,
-      });
-      localStorage.setItem("authUser", JSON.stringify(response));
-      yield put(loginSuccess(response));
-    }
-    history('/dashboard');
+    const response = yield call(axios.post, action.payload.apiUrl, {
+      username: action.payload.email,
+      password: action.payload.password,
+    });
+    const token = response.data.token; // Adjust the key according to your API response
+    localStorage.setItem("authToken", token);
+
+    // در صورت موفقیت
+    yield put({ type: LOGIN_SUCCESS, payload: response.data });
+    // هدایت به داشبورد
+    action.payload.navigate("/dashboard");
   } catch (error) {
-    yield put(apiError(error));
+    // مدیریت خطا
+    yield put({
+      type: API_ERROR,
+      payload: error.response?.data?.error || "خطایی رخ داده است",
+    });
   }
 }
 
