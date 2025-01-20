@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 import classnames from "classnames"; // اطمینان حاصل کنید که این کتابخانه نصب شده است
 import Personalinfo from "./Personalinfo";
-import Jobinfo from "./jobinfo";
+import Jobinfo from "./Jobinfo";
 import Personalrecords from "./Personalrecords";
 
 const ProfileTab = () => {
