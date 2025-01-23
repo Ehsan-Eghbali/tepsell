@@ -184,7 +184,7 @@ const ContactsList = () => {
           <>
             {!cell.getValue() ? (
               <div className="avatar-xs">
-                <span className="avatar-title rounded-circle">{cell.row.original.name.charAt(0)} </span>
+                {/* <span className="avatar-title rounded-circle">{cell.row.original.name.charAt(0)} </span> */}
               </div>
             ) : (
               <div>
