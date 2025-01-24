@@ -13,8 +13,26 @@ import {
   UPDATE_USER_FAIL,
   DELETE_USER,
   DELETE_USER_SUCCESS,
-  DELETE_USER_FAIL,
+  DELETE_USER_FAIL, GET_OPTIONS, GET_OPTIONS_SUCCESS, GET_OPTIONS_FAIL,
 } from "./actionTypes"
+
+
+export const getOptionsRequest = () => ({
+  type: GET_OPTIONS,
+});
+
+// Action برای موفقیت دریافت گزینه‌ها
+export const getOptionsSuccess = (options) => ({
+  type: GET_OPTIONS_SUCCESS,
+  payload: options,
+});
+
+// Action برای شکست دریافت گزینه‌ها
+export const getOptionsFail = (error) => ({
+  type: GET_OPTIONS_FAIL,
+  payload: error,
+});
+
 
 export const getUsers = () => ({
   type: GET_USERS,

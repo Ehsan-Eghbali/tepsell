@@ -8,7 +8,7 @@ import {
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
   GET_USER_PROFILE_SUCCESS,
-  GET_USER_PROFILE_FAIL,
+  GET_USER_PROFILE_FAIL, GET_OPTIONS, GET_OPTIONS_SUCCESS, GET_OPTIONS_FAIL,
 } from "./actionTypes"
 
 const INIT_STATE = {
@@ -20,6 +20,24 @@ const INIT_STATE = {
 
 const contacts = (state = INIT_STATE, action) => {
   switch (action.type) {
+    case GET_OPTIONS:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_OPTIONS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        options: action.payload,
+      };
+    case GET_OPTIONS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
     case GET_USERS_SUCCESS:
       return {
         ...state,

@@ -14,9 +14,10 @@ import { withTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import withRouter from "../../Common/withRouter";
+import UserProfile from "../../../pages/Authentication/user-profile";
 
 // users
-
+import UserProfileImg from "../../../assets/images/avatar.png";
 const ProfileMenu = (props) => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false);
@@ -39,7 +40,7 @@ const ProfileMenu = (props) => {
   }, [props.success]);
 
   return (
-    <React.Fragment>
+    <>
       <Dropdown
         isOpen={menu}
         toggle={() => setMenu(!menu)}
@@ -51,6 +52,7 @@ const ProfileMenu = (props) => {
           tag="button"
         >
           <img
+              src={UserProfileImg}
             className="rounded-circle header-profile-user"
             alt="Header Avatar"
           />
@@ -63,19 +65,6 @@ const ProfileMenu = (props) => {
             <i className="bx bx-user font-size-16 align-middle me-1" />
             {props.t("پروفایل")}{" "}
           </DropdownItem>
-          <DropdownItem tag="a" href="/crypto-wallet">
-            <i className="bx bx-wallet font-size-16 align-middle me-1" />
-            {props.t("کیف پول من")}
-          </DropdownItem>
-          <DropdownItem tag="a" href="#">
-            <span className="badge bg-success float-end">11</span>
-            <i className="bx bx-wrench font-size-16 align-middle me-1" />
-            {props.t("تنظیمات")}
-          </DropdownItem>
-          <DropdownItem tag="a" href="auth-lock-screen">
-            <i className="bx bx-lock-open font-size-16 align-middle me-1" />
-            {props.t("صفحه ی قفل")}
-          </DropdownItem>
           <div className="dropdown-divider" />
           <Link to="/logout" className="dropdown-item">
             <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger" />
@@ -83,7 +72,7 @@ const ProfileMenu = (props) => {
           </Link>
         </DropdownMenu>
       </Dropdown>
-    </React.Fragment>
+    </>
   );
 };
 

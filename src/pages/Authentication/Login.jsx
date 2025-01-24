@@ -28,7 +28,7 @@ import {
 import {socialLogin } from "../../store/actions";
 
 // import images
-import Pegah111 from "../../assets/images/Pegah111.png";
+import Pegah from "../../assets/images/Pegah.png";
 import {LOGIN_USER} from "../../store/auth/login/actionTypes";
 
 const Login = (props) => {
@@ -77,17 +77,8 @@ const Login = (props) => {
 
   const { error } = useSelector(LoginProperties);
 
-  const signIn = (type) => {
-    dispatch(socialLogin(type, props.router.navigate, API_URL));
-  };
-
   return (
-      <React.Fragment>
-        <div className="home-btn d-none d-sm-block">
-          <Link to="/" className="text-dark">
-            <i className="bx bx-home h2" />
-          </Link>
-        </div>
+      <>
         <div className="account-pages my-5 pt-sm-5">
           <Container>
             <Row className="justify-content-center">
@@ -102,25 +93,11 @@ const Login = (props) => {
                         </div>
                       </Col>
                       <Col className="col-5 align-self-end">
-                        <img src="" alt="" className="img-fluid" />
+                        <img src={Pegah} alt="" className="img-fluid" />
                       </Col>
                     </Row>
                   </div>
                   <CardBody className="pt-0">
-                    <div className="auth-logo">
-                      <Link to="/" className="auth-logo-light">
-                        <div className="avatar-md profile-user-wid mb-4">
-                        <span className="avatar-title rounded-circle bg-light">
-                          <img
-                              src={Pegah111}
-                              alt=""
-                              className="rounded-circle"
-                              height="34"
-                          />
-                        </span>
-                        </div>
-                      </Link>
-                    </div>
                     <div className="p-2">
                       <Form
                           className="form-horizontal"
@@ -194,13 +171,6 @@ const Login = (props) => {
                             ورود
                           </button>
                         </div>
-
-                        <div className="mt-4 text-center">
-                          <Link to="/reset-password" className="text-muted">
-                            <i className="mdi mdi-lock me-1" />
-                            رمز عبور خود را فراموش کرده‌اید؟
-                          </Link>
-                        </div>
                       </Form>
                     </div>
                   </CardBody>
@@ -208,20 +178,19 @@ const Login = (props) => {
                 <div className="mt-5 text-center">
                   <p>
                     حسابی ندارید؟{" "}
-                    <Link to="/Contact-us" className="fw-medium text-primary">
+                    <p className="fw-medium text-primary">
                       با واحد منابع انسانی ارتباط بگیرید
-                    </Link>
+                    </p>
                   </p>
                   <p>
-                    © {new Date().getFullYear()} ساخته شده توسط{" "}
-                    <i className="mdi mdi-heart text-danger" /> پگاه داده کاوان شریف
+                     پگاه داده کاوان شریف
                   </p>
                 </div>
               </Col>
             </Row>
           </Container>
         </div>
-      </React.Fragment>
+      </>
   );
 };
 
