@@ -163,7 +163,7 @@ const TableContainer = ({
 
         {isJobListGlobalFilter && <JobListGlobalFilter setGlobalFilter={setGlobalFilter} />}
 
-        {isAddButton && <Col sm={6}>
+        {isAddButton && <Col sm={12}>
           <div className="text-sm-end">
             <Button type="button" className={buttonClass} onClick={handleUserClick}>
               <i className="mdi mdi-plus me-1"></i> {buttonName}</Button>

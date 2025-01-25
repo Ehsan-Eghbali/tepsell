@@ -128,7 +128,7 @@ export const getChats = () => get(url.GET_CHATS);
 // get groups
 export const getGroups = () => get(url.GET_GROUPS);
 
-// get Contacts
+// get Employees
 export const getContacts = () => get(url.GET_CONTACTS);
 
 // get messages

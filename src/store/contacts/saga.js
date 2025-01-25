@@ -13,12 +13,28 @@ import {
   updateUserSuccess,
   updateUserFail,
   deleteUserSuccess,
-  deleteUserFail,
+  deleteUserFail, getOptionsSuccess, getOptionsFail,
 } from "./actions"
 
 //Include Both Helper File with needed methods
 import { getUsers, getUserProfile, addNewUser, updateUser, deleteUser } from "../../helpers/fakebackend_helper"
 import { toast } from "react-toastify"
+import axios from "axios";
+
+function* fetchOptions(action) {
+  try {
+    const authToken = localStorage.getItem("authToken");
+    const response = yield call(axios.get, action.payload.apiUrl, {
+      headers: {
+        Authorization: `Bearer ${authToken}`, // اضافه کردن توکن به هدر
+      }
+    });
+
+    yield put(getOptionsSuccess(response.data)); // ذخیره در Redux Store
+  } catch (error) {
+    yield put(getOptionsFail(error));
+  }
+}
 
 function* fetchUsers() {
   try {

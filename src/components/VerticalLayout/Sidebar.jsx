@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 
 
 
+import Pegah from "../../assets/images/logoTop.png";
+import PegahSm from "../../assets/images/Pegah.png";
 
 const Sidebar = (props) => {
   return (
@@ -21,23 +23,23 @@ const Sidebar = (props) => {
         <div className="navbar-brand-box">
           <Link to="/" className="logo logo-dark">
             <span className="logo-sm">
-              <img src="" alt="" height="22" />
+              <img src={PegahSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
-              <img src="" alt="" height="17" />
+              <img src={Pegah} alt="" height="17" />
             </span>
           </Link>
 
           <Link to="/" className="logo logo-light">
             <span className="logo-sm">
-              <img src="" alt="" height="22" />
+              <img src={PegahSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
-              <img src="" alt="" height="45" />
+              <img src={Pegah} alt="" height="45" />
             </span>
           </Link>
         </div>
-        <div data-simplebar className="h-100">
+        <div className="h-100">
           {props.type !== "condensed" ? <SidebarContent /> : <SidebarContent />}
         </div>
 

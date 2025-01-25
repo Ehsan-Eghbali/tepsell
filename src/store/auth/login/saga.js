@@ -27,7 +27,7 @@ function* loginUser(action) {
     // در صورت موفقیت
     yield put({ type: LOGIN_SUCCESS, payload: response.data });
     // هدایت به داشبورد
-    action.payload.navigate("/dashboard");
+    action.payload.navigate("/");
   } catch (error) {
     // مدیریت خطا
     yield put({

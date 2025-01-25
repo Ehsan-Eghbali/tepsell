@@ -144,19 +144,6 @@ const SidebarContent = (props) => {
       <SimpleBar className="h-100" ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-            <li className="menu-title">{props.t("داشبورد جامع ")} </li>
-            <li>
-              <Link to="/#" className="has-arrow">
-                <i className=" bx bx-pie-chart-alt-2"></i>
-                <span>{props.t("داشبورد مدیریت")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
-
-                <li>
-                  <Link to="/dashboard-job">{props.t("تجزیه و تحلیل")}</Link>
-                </li>
-              </ul>
-            </li>
 
             <li className="menu-title">{props.t("اطلاعات پرسنلی")}</li>
 
@@ -167,112 +154,74 @@ const SidebarContent = (props) => {
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="/contacts-list">{props.t("لیست همکاران")}</Link>
+                  <Link to="/employees-List">{props.t("لیست همکاران")}</Link>
                 </li>
-                <li>
-                  <Link to="/contacts-grid">
-                    {props.t("حکم کارگزینی  ")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contacts-profile">{props.t("پروفایل")}</Link>
-                </li>
+                {/*<li>*/}
+                {/*  <Link to="/contacts-grid">*/}
+                {/*    {props.t("حکم کارگزینی  ")}*/}
+                {/*  </Link>*/}
+                {/*</li>*/}
+                {/*<li>*/}
+                {/*  <Link to="/contacts-profile">{props.t("پروفایل")}</Link>*/}
+                {/*</li>*/}
               </ul>
             </li>
 
-            <li>
-              <Link to="/chat" className="">
-                <i className="bx bx-chat"></i>
-                <span>{props.t("تیکت")}</span>
-              </Link>
-            </li>
 
-            
+            {/*<li className="menu-title">جذب و استخدام</li>*/}
+            {/*<li>*/}
+            {/*  <Link to="/#"className="has-arrow ">*/}
+            {/*    <i className="bx bx-briefcase-alt"></i>*/}
+            {/*    <span key="t-jobs">{props.t("مشاغل")}</span>*/}
+            {/*  </Link>*/}
+            {/*  <ul className="sub-menu">*/}
+            {/*    <li>*/}
+            {/*      <Link to="/job-list">{props.t("لیست مشاغل")}</Link>*/}
+            {/*    </li>*/}
+            {/*    <li>*/}
+            {/*      <Link to="/job-apply">{props.t("درخواست مشاغل")}</Link>*/}
+            {/*    </li>*/}
+            {/*    <li>*/}
+            {/*      <Link to="/job-details">{props.t("جزئیات مشاغل")}</Link>*/}
+            {/*    </li>*/}
+            {/*  </ul>*/}
+            {/*</li>*/}
 
-            <li className="menu-title">جذب و استخدام</li>
-            <li>
-              <Link to="/#"className="has-arrow ">
-                <i className="bx bx-briefcase-alt"></i>
-                <span key="t-jobs">{props.t("مشاغل")}</span>
-              </Link>
-              <ul className="sub-menu">
-                <li>
-                  <Link to="/job-list">{props.t("لیست مشاغل")}</Link>
-                </li>
-                <li>
-                  <Link to="/job-apply">{props.t("درخواست مشاغل")}</Link>
-                </li>
-                <li>
-                  <Link to="/job-details">{props.t("جزئیات مشاغل")}</Link>
-                </li>
-              </ul>
-            </li>
+            {/*<li>*/}
+            {/*  <Link to="/#" className="has-arrow ">*/}
+            {/*    <i className="bx bx-file"></i>*/}
+            {/*    <span>{props.t("سای")}</span>*/}
+            {/*  </Link>*/}
+            {/*  <ul className="sub-menu" aria-expanded="false">*/}
+            {/*    <li>*/}
+            {/*      <Link to="/pages-starter">{props.t("صفحه شروع")}</Link>*/}
+            {/*    </li>*/}
+            {/*    <li>*/}
+            {/*      <Link to="/pages-maintenance">{props.t("نگهداری")}</Link>*/}
+            {/*    </li>*/}
+            {/*    <li>*/}
+            {/*      <Link to="/pages-comingsoon">{props.t("به زودی")}</Link>*/}
+            {/*    </li>*/}
+            {/*    <li>*/}
+            {/*      <Link to="/pages-timeline">{props.t("خط زمانی")}</Link>*/}
+            {/*    </li>*/}
+            {/*    <li>*/}
+            {/*      <Link to="/pages-faqs">{props.t("سوالات متداول")}</Link>*/}
+            {/*    </li>*/}
+            {/*    <li>*/}
+            {/*      <Link to="/pages-pricing">{props.t("قیمت گذاری")}</Link>*/}
+            {/*    </li>*/}
+            {/*    <li>*/}
+            {/*      <Link to="/pages-404">{props.t("ارور 404")}</Link>*/}
+            {/*    </li>*/}
+            {/*    <li>*/}
+            {/*      <Link to="/pages-500">{props.t("ارور 500")}</Link>*/}
+            {/*    </li>*/}
+            {/*  </ul>*/}
+            {/*</li>*/}
 
-            <li>
-              <Link to="/#" className="has-arrow ">
-                <i className="bx bx-file"></i>
-                <span>{props.t("سای")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
-                <li>
-                  <Link to="/pages-starter">{props.t("صفحه شروع")}</Link>
-                </li>
-                <li>
-                  <Link to="/pages-maintenance">{props.t("نگهداری")}</Link>
-                </li>
-                <li>
-                  <Link to="/pages-comingsoon">{props.t("به زودی")}</Link>
-                </li>
-                <li>
-                  <Link to="/pages-timeline">{props.t("خط زمانی")}</Link>
-                </li>
-                <li>
-                  <Link to="/pages-faqs">{props.t("سوالات متداول")}</Link>
-                </li>
-                <li>
-                  <Link to="/pages-pricing">{props.t("قیمت گذاری")}</Link>
-                </li>
-                <li>
-                  <Link to="/pages-404">{props.t("ارور 404")}</Link>
-                </li>
-                <li>
-                  <Link to="/pages-500">{props.t("ارور 500")}</Link>
-                </li>
-              </ul>
-            </li>
+            {/*<li className="menu-title">{props.t("حقوق و دستمزد")}</li>*/}
 
-            <li className="menu-title">{props.t("حقوق و دستمزد")}</li>
-
-            <li>
-              <Link to="/#" className="has-arrow ">
-                <i className="bx bxs-bar-chart-alt-2"></i>
-                <span>{props.t("نمودار ها")}</span>
-              </Link>
-
-              <ul className="sub-menu" aria-expanded="false">
-                <li>
-                  <Link to="/apex-charts">{props.t("Apex نمودار")}</Link>
-                </li>
-                <li>
-                  <Link to="/e-charts">{props.t("E نمودار")}</Link>
-                </li>
-                <li>
-                  <Link to="/chartjs-charts">{props.t("Chartjs نمودار")}</Link>
-                </li>
-
-                <li>
-                  <Link to="/charts-knob">{props.t("Knob نمودار")}</Link>
-                </li>
-                <li>
-                  <Link to="/sparkline-charts">
-                    {props.t("Sparkline نمودار")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/re-charts">{props.t("Re نمودار")}</Link>
-                </li>
-              </ul>
-            </li>
           </ul>
         </div>
       </SimpleBar>
