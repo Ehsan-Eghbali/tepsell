@@ -411,7 +411,7 @@ const EmployeesList = () => {
                                 <Row>
                                     <Col xs={12}>
                                         <div className="mb-3">
-                                            <Label>نام و نام خانوادگی</Label>
+                                            <Label>نام </Label>
                                             <Input
                                                 name="name"
                                                 type="text"
@@ -425,6 +425,24 @@ const EmployeesList = () => {
                                             {validation.touched.name && validation.errors.name ? (
                                                 <FormFeedback type="invalid">
                                                     {validation.errors.name}
+                                                </FormFeedback>
+                                            ) : null}
+                                        </div>
+                                        <div className="mb-3">
+                                            <Label> نام خانوادگی</Label>
+                                            <Input
+                                                name="lastname"
+                                                type="text"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.lastname || ""}
+                                                invalid={
+                                                    !!(validation.touched.lastname && validation.errors.lastname)
+                                                }
+                                            />
+                                            {validation.touched.lastname && validation.errors.lastname ? (
+                                                <FormFeedback type="invalid">
+                                                    {validation.errors.lastname}
                                                 </FormFeedback>
                                             ) : null}
                                         </div>
