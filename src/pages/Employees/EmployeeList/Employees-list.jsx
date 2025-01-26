@@ -221,7 +221,7 @@ const EmployeesList = () => {
                 enableSorting: true,
             },
             {
-                header: 'نام و نام خانوادگی',
+                header: 'نام ',
                 accessorKey: 'name',
                 enableColumnFilter: false,
                 enableSorting: true,
@@ -236,6 +236,22 @@ const EmployeesList = () => {
                     )
                 }
             },
+            {
+                header: 'نام خانوادگی',
+                accessorKey: 'lastName',
+                enableColumnFilter: false,
+                enableSorting: true,
+                cell: (cell) => {
+                    return (
+                        <>
+                            <h5 className='font-size-14 mb-1'>
+                                <Link to='#' className='text-dark'>{cell.getValue()}</Link>
+                            </h5>
+                        </>
+                    );
+                },
+            },
+            
             {
                 header: 'ایمیل',
                 accessorKey: 'email',
