@@ -27,7 +27,7 @@ const Personalinfo = () => {
       educationLevel: "",
       universityName: "",
       email: "",
-      password: "",
+      personnelCode: "",
       city: "",
       state: "",
       zip: "",
@@ -233,53 +233,47 @@ const Personalinfo = () => {
 
                         <Col md={4}>
                           <div className="mb-3">
-                            <Label htmlFor="formrow-email-Input">محل تولد </Label>
+                            <Label htmlFor="formrow-placeofbirth-Input">محل تولد</Label>
                             <Input
                               type="text"
-                              name="numbercall"
+                              name="placeofbirth"
                               className="form-control"
-                              id="formrow-email-Input"
-                              placeholder="    شماره موبایل 11 رقم"
-                              value={formik.values.numbercall}
+                              id="formrow-placeofbirth-Input"
+                              placeholder="محل تولد خود را وارد کنید"
+                              value={formik.values.placeofbirth}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              invalid={
-                                formik.touched.numbercall && formik.errors.numbercall
-                                  ? true
-                                  : false
-                              }
+                              invalid={!!(formik.touched.placeofbirth && formik.errors.placeofbirth)}
                             />
-                            {formik.errors.numbercall && formik.touched.numbercall ? (
+                            {formik.errors.placeofbirth && formik.touched.placeofbirth && (
                               <FormFeedback type="invalid">
-                                {formik.errors.numbercall}
+                                {formik.errors.placeofbirth}
                               </FormFeedback>
-                            ) : null}
+                            )}
                           </div>
+
                         </Col>
                         <Col md={4}>
                           <div className="mb-3">
-                            <Label htmlFor="formrow-email-Input"> محل صدور شناسنامه </Label>
+                            <Label htmlFor="formrow-placeofissue-Input">محل صدور شناسنامه</Label>
                             <Input
                               type="text"
-                              name="Nickname"
+                              name="placeOfIssue"
                               className="form-control"
-                              id="formrow-email-Input"
-                              placeholder="نام خانوادگی را وارد کنید"
-                              value={formik.values.Nickname}
+                              id="formrow-placeofissue-Input"
+                              placeholder="محل صدور شناسنامه را وارد کنید"
+                              value={formik.values.placeOfIssue}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              invalid={
-                                formik.touched.Nickname && formik.errors.Nickname
-                                  ? true
-                                  : false
-                              }
+                              invalid={!!(formik.touched.placeOfIssue && formik.errors.placeOfIssue)}
                             />
-                            {formik.errors.Nickname && formik.touched.Nickname ? (
+                            {formik.errors.placeOfIssue && formik.touched.placeOfIssue && (
                               <FormFeedback type="invalid">
-                                {formik.errors.Nickname}
+                                {formik.errors.placeOfIssue}
                               </FormFeedback>
-                            ) : null}
+                            )}
                           </div>
+
                         </Col>
                       </Row>
 
@@ -430,31 +424,28 @@ const Personalinfo = () => {
                         </Col>
                         <Col md={6}>
                           <div className="mb-3">
-                            <Label htmlFor="formrow-password-Input">
-                              رمز عبور
+                            <Label htmlFor="formrow-personnelCode-Input">
+                              کد پرسنلی
                             </Label>
                             <Input
-                              type="password"
-                              name="password"
+                              type="number"
+                              name="personnelCode"
                               className="form-control"
-                              id="formrow-password-Input"
-                              placeholder="رمز عبور خود را وارد کنید"
+                              id="formrow-personnelCode-Input"
+                              placeholder="کد پرسنلی خود را وارد کنید"
                               autoComplete="off"
-                              value={formik.values.password}
+                              value={formik.values.personnelCode}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              invalid={
-                                formik.touched.password && formik.errors.password
-                                  ? true
-                                  : false
-                              }
+                              invalid={!!(formik.touched.personnelCode && formik.errors.personnelCode)}
                             />
-                            {formik.errors.password && formik.touched.password ? (
+                            {formik.errors.personnelCode && formik.touched.personnelCode && (
                               <FormFeedback type="invalid">
-                                {formik.errors.password}
+                                {formik.errors.personnelCode}
                               </FormFeedback>
-                            ) : null}
+                            )}
                           </div>
+
                         </Col>
                       </Row>
 
@@ -534,28 +525,25 @@ const Personalinfo = () => {
 
                         <Col lg={12}>
                           <div className="mb-3">
-                            <Label htmlFor="formrow-InputZip"> آدرس محل سکونت</Label>
+                            <Label htmlFor="formrow-InputAddress">آدرس محل سکونت</Label>
                             <Input
                               type="text"
-                              name="zip"
+                              name="address"
                               className="form-control"
-                              id="formrow-InputZip"
-                              placeholder="کد پستی خود را وارد کنید"
-                              value={formik.values.zip}
+                              id="formrow-InputAddress"
+                              placeholder="آدرس محل سکونت خود را وارد کنید"
+                              value={formik.values.address}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              invalid={
-                                formik.touched.zip && formik.errors.zip
-                                  ? true
-                                  : false
-                              }
+                              invalid={!!(formik.touched.address && formik.errors.address)}
                             />
-                            {formik.errors.zip && formik.touched.zip ? (
+                            {formik.errors.address && formik.touched.address && (
                               <FormFeedback type="invalid">
-                                {formik.errors.zip}
+                                {formik.errors.address}
                               </FormFeedback>
-                            ) : null}
+                            )}
                           </div>
+
                         </Col>
                       </Row>
 

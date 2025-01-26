@@ -1,5 +1,8 @@
-import React, {useEffect, useState, useMemo} from "react";
-import {Link} from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import DatePicker from "react-multi-date-picker"
+import persian from "react-date-object/calendars/persian"
+import persian_fa from "react-date-object/locales/persian_fa"
 import withRouter from "../../../components/Common/withRouter";
 import TableContainer from "../../../components/Common/TableContainer";
 import Spinners from "../../../components/Common/Spinner"
@@ -19,12 +22,15 @@ import {
     Button,
 } from "reactstrap";
 import * as Yup from "yup";
-import {useFormik} from "formik";
-import {useNavigate} from "react-router-dom";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 
 //Import Breadcrumb
 import Breadcrumbs from "/src/components/Common/Breadcrumb";
 import DeleteModal from "/src/components/Common/DeleteModal";
+
+//redux
+
 
 import {
     getUsers as onGetUsers,
@@ -32,12 +38,12 @@ import {
     updateUser as onUpdateUser,
     deleteUser as onDeleteUser, getOptionsRequest,
 } from "/src/store/contacts/actions";
-import {isEmpty} from "lodash";
+import { isEmpty } from "lodash";
 
 //redux
-import {useSelector, useDispatch} from "react-redux";
-import {createSelector} from "reselect";
-import {ToastContainer} from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
+import { ToastContainer } from "react-toastify";
 
 const EmployeesList = () => {
     document.title = "لیست پرسنل ";
@@ -49,12 +55,14 @@ const EmployeesList = () => {
         enableReinitialize: true,
         initialValues: {
             name: (contact && contact.name) || "",
-            designation: (contact && contact.designation) || "",
+            phonenumber: (contact && contact.phonenumber) || "",
+            Personnelcode: (contact && contact.Personnelcode) || "",
             tags: (contact && contact.tags) || "",
+            birthday: (contact && contact.birthday) || "",
             status: (contact && contact.status) || "",
             unit: (contact && contact.unit) || "",
             email: (contact && contact.email) || "",
-            projects: (contact && contact.projects) || "",
+            jobposition: (contact && contact.jobposition) || "",
         },
         validationSchema: Yup.object({
             name: Yup.string().required("لطفا نام خود را وارد کنید"),
@@ -118,7 +126,7 @@ const EmployeesList = () => {
         users, loading
     } = useSelector(ContactsProperties);
 
-    const {options} = useSelector((state) => state.contacts);
+    const { options } = useSelector((state) => state.contacts);
 
     useEffect(() => {
         dispatch(getOptionsRequest()); // گرفتن گزینه‌ها از بک‌اند
@@ -245,7 +253,7 @@ const EmployeesList = () => {
                             {
                                 cell.getValue()?.map((item, index) => (
                                     <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
-                                          key={index}>{item}</Link>
+                                        key={index}>{item}</Link>
                                 ))
                             }
                         </div>
@@ -263,13 +271,28 @@ const EmployeesList = () => {
                             {
                                 cell.getValue()?.map((item, index) => (
                                     <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
-                                          key={index}>{item}</Link>
+                                        key={index}>{item}</Link>
                                 ))
                             }
                         </div>
                     );
                 },
             },
+            {
+                header: 'تاریخ تولد',
+                accessorKey: 'birthDate',
+                enableColumnFilter: false,
+                enableSorting: true,
+                cell: (cell) => {
+                    const birthDate = cell.getValue();
+                    return (
+                        <div>
+                            {birthDate ? new Date(birthDate).toLocaleDateString('fa-IR') : 'نامشخص'}
+                        </div>
+                    );
+                },
+            },
+            
             {
                 header: 'وضعیت همکاری ',
                 accessorKey: 'status',
@@ -282,7 +305,7 @@ const EmployeesList = () => {
                                 cell.getValue()?.map((item, index) => (
 
                                     <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
-                                          key={index}>{item}</Link>
+                                        key={index}>{item}</Link>
                                 ))
                             }
                         </div>
@@ -308,7 +331,7 @@ const EmployeesList = () => {
                                     handleUserClick(userData);
                                 }}
                             >
-                                <i className="mdi mdi-pencil font-size-18" id="edittooltip"/>
+                                <i className="mdi mdi-pencil font-size-18" id="edittooltip" />
                             </Link>
                             <Link
                                 to="#"
@@ -317,14 +340,14 @@ const EmployeesList = () => {
                                     const userData = cellProps.row.original;
                                     onClickDelete(userData);
                                 }}>
-                                <i className="mdi mdi-delete font-size-18" id="deletetooltip"/>
+                                <i className="mdi mdi-delete font-size-18" id="deletetooltip" />
                             </Link>
                             <Link
                                 to="/employee/1"
                                 className="text-primary"
 
                             >
-                                <i className="mdi mdi-eye font-size-18" id="deletetooltip"/>
+                                <i className="mdi mdi-eye font-size-18" id="deletetooltip" />
                             </Link>
                         </div>
                     );
@@ -347,12 +370,13 @@ const EmployeesList = () => {
             <div className="page-content">
                 <Container fluid>
                     {isLoading ? (
-                        <Spinners setLoading={setLoading}/>
+                        <Spinners setLoading={setLoading} />
                     ) : (
                         <Row>
                             <Col lg="12">
                                 <Card>
                                     <CardBody>
+
                                         <TableContainer
                                             columns={columns}
                                             data={users || []}
@@ -387,7 +411,7 @@ const EmployeesList = () => {
                                 <Row>
                                     <Col xs={12}>
                                         <div className="mb-3">
-                                            <Label>نام</Label>
+                                            <Label>نام و نام خانوادگی</Label>
                                             <Input
                                                 name="name"
                                                 type="text"
@@ -401,6 +425,61 @@ const EmployeesList = () => {
                                             {validation.touched.name && validation.errors.name ? (
                                                 <FormFeedback type="invalid">
                                                     {validation.errors.name}
+                                                </FormFeedback>
+                                            ) : null}
+                                        </div>
+                                        <div className="mb-3">
+                                            <Label> شماره تماس </Label>
+                                            <Input
+                                                name="phonenumber"
+                                                type="phone"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.phonenumber || ""}
+                                                invalid={
+                                                    !!(validation.touched.phonenumber && validation.errors.phonenumber)
+                                                }
+                                            />
+                                            {validation.touched.phonenumber && validation.errors.phonenumber ? (
+                                                <FormFeedback type="invalid">
+                                                    {validation.errors.phonenumber}
+                                                </FormFeedback>
+                                            ) : null}
+                                        </div>
+                                        <div className="mb-3">
+                                            <Label> شماره پرسنلی </Label>
+                                            <Input
+                                                name="Personnelcode"
+                                                type="number"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.Personnelcode || ""}
+                                                invalid={
+                                                    !!(validation.touched.Personnelcode && validation.errors.Personnelcode)
+                                                }
+                                            />
+                                            {validation.touched.Personnelcode && validation.errors.Personnelcode ? (
+                                                <FormFeedback type="invalid">
+                                                    {validation.errors.Personnelcode}
+                                                </FormFeedback>
+                                            ) : null}
+                                        </div>
+                                        <div className="mb-3 d-flex flex-column">
+                                            <Label htmlFor="formrow-firstname-Input"> تاریخ تولد</Label>
+                                            <DatePicker
+                                                calendar={persian}
+                                                locale={persian_fa}
+                                                calendarPosition="bottom-right"
+                                                name="birthday"
+                                                placeholder="تاریخ تولد"
+                                                className="form-control"
+                                                id="formrow-birthday"
+                                                value={validation.values.birthday}
+                                                style={{ height: "38px", width: "100%" }}
+                                            />
+                                            {validation.errors.birthday && validation.touched.birthday ? (
+                                                <FormFeedback type="invalid">
+                                                    {validation.errors.birthday}
                                                 </FormFeedback>
                                             ) : null}
                                         </div>
@@ -426,51 +505,49 @@ const EmployeesList = () => {
                                         </div>
                                         <div className="mb-3">
                                             <Label>کسب و کار</Label>
-                                            <Input
-                                                type="select"
+                                            <select
                                                 name="tags"
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
-                                                value={validation.values.tags || []}
-                                                invalid={
-                                                    !!(validation.touched.tags && validation.errors.tags)
-                                                }
+                                                multiple={false}
+                                                value={validation.values.tags || ""}
+                                                invalid={validation.touched.tags && validation.errors.tags ? true : undefined}
                                             >
-                                                <option>تپسل</option>
-                                                <option>فانتوری</option>
-                                                <option>متریکس</option>
-                                                <option>مدیاهاوس</option>
-                                                <option>متیس</option>
-                                                <option>آیژن</option>
-                                                <option>آتنا</option>
-                                                <option>گپیفای</option>
-                                                <option>دلفین</option>
-                                            </Input>
+                                                <option value="">انتخاب کنید</option>
+                                                <option value="تپسل">تپسل</option>
+                                                <option value="فانتوری">فانتوری</option>
+                                                <option value="متریکس">متریکس</option>
+                                                <option value="مدیاهاوس">مدیاهاوس</option>
+                                                <option value="متیس">متیس</option>
+                                                <option value="آیژن">آیژن</option>
+                                                <option value="آتنا">آتنا</option>
+                                                <option value="گپیفای">گپیفای</option>
+                                                <option value="دلفین">دلفین</option>
+                                            </select>
                                             {validation.touched.tags && validation.errors.tags ? (
                                                 <FormFeedback type="invalid">
-                                                    {" "}
-                                                    {validation.errors.tags}{" "}
+                                                    {validation.errors.tags}
                                                 </FormFeedback>
                                             ) : null}
                                         </div>
 
+
                                         <div className="mb-3">
                                             <Label>وضعیت همکاری</Label>
-                                            <Input
-                                                type="select"
+                                            <select
                                                 name="status"
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
-                                                value={validation.values.status || []}
-                                                invalid={
-                                                    !!(validation.touched.status && validation.errors.status)
-                                                }
+                                                multiple={false}
+                                                value={validation.values.status || ""}
+                                                invalid={validation.touched.status && validation.errors.status ? true : undefined}
                                             >
                                                 <option>درحال همکاری</option>
                                                 <option>پایان همکاری</option>
-                                            </Input>
+                                            </select>
+
                                             {validation.touched.status && validation.errors.status ? (
                                                 <FormFeedback type="invalid">
                                                     {" "}
@@ -481,15 +558,14 @@ const EmployeesList = () => {
 
                                         <div className="mb-3">
                                             <Label>واحد</Label>
-                                            <Input
-                                                type="select"
+                                            <select
                                                 name="unit"
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
-                                                value={validation.values.unit || []}
+                                                value={validation.values.unit || ""}
                                                 invalid={
-                                                    !!(validation.touched.unit && validation.errors.unit)
+                                                    validation.touched.unit && validation.errors.unit ? true : undefined
                                                 }
                                             >
                                                 <option>فنی</option>
@@ -502,7 +578,8 @@ const EmployeesList = () => {
                                                 <option>مالی</option>
                                                 <option>منابع انسانی</option>
                                                 <option>زیرساخت و it</option>
-                                            </Input>
+                                            </select>
+
                                             {validation.touched.unit && validation.errors.unit ? (
                                                 <FormFeedback type="invalid">
                                                     {" "}
@@ -513,29 +590,23 @@ const EmployeesList = () => {
                                         <div className="mb-3">
                                             <Label>سمت شغلی</Label>
                                             <Input
-                                                type="select"
-                                                name="designation"
-                                                className="form-select"
+                                                type="text"
+                                                name="jobposition"
+                                                className="form-control"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
-                                                value={validation.values.designation || ""}
+                                                value={validation.values.jobposition || ""}
                                                 invalid={
-                                                    !!(validation.touched.designation && validation.errors.designation)
+                                                    !!(validation.touched.jobposition && validation.errors.jobposition)
                                                 }
-                                            >
-                                                <option>برنامه نویس فرانت</option>
-                                                <option>طراح UI/UX</option>
-                                                <option>برنامه نویس بکند</option>
-                                                <option>برنامه نویس فول استک</option>
-                                            </Input>
-                                            {validation.touched.designation &&
-                                            validation.errors.designation ? (
+                                            />
+                                            {validation.touched.jobposition && validation.errors.jobposition ? (
                                                 <FormFeedback type="invalid">
-                                                    {" "}
-                                                    {validation.errors.designation}{" "}
+                                                    {validation.errors.jobposition}
                                                 </FormFeedback>
                                             ) : null}
                                         </div>
+
                                     </Col>
                                 </Row>
                                 <Row>
@@ -557,7 +628,7 @@ const EmployeesList = () => {
                     </Modal>
                 </Container>
             </div>
-            <ToastContainer/>
+            <ToastContainer />
         </>
     );
 };
