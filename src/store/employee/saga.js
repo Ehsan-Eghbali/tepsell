@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects"
 
 // Crypto Redux States
-import { GET_USERS, GET_USER_PROFILE, ADD_NEW_USER, DELETE_USER, UPDATE_USER } from "./actionTypes"
+import { GET_USERS, GET_USER_PROFILE, ADD_NEW_USER, DELETE_USER, UPDATE_USER ,GET_OPTIONS} from "./actionTypes"
 
 import {
   getUsersSuccess,
@@ -21,21 +21,34 @@ import { getUsers, getUserProfile, addNewUser, updateUser, deleteUser } from "..
 import { toast } from "react-toastify"
 import axios from "axios";
 
-function* fetchOptions(action) {
+function* fetchOptions() {
   try {
-    const authToken = localStorage.getItem("authToken");
-    const response = yield call(axios.get, action.payload.apiUrl, {
-      headers: {
-        Authorization: `Bearer ${authToken}`, // اضافه کردن توکن به هدر
-      }
+    const response = yield call(axios.get, "https://hrtapsell.ir/api/employee/preData", {
     });
 
-    yield put(getOptionsSuccess(response.data)); // ذخیره در Redux Store
+    yield put(getOptionsSuccess(response.data));
   } catch (error) {
     yield put(getOptionsFail(error));
   }
 }
-
+function* onAddNewUser({ payload: user }) {
+  let authToken = localStorage.getItem("authToken");
+  try {
+    const response = yield call(
+        axios.post,
+        "http://hrtapsell.ir/api/employee/create",
+        user,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`
+          },
+        }
+    );
+    yield put(addUserSuccess(response.data));
+  } catch (error) {
+    yield put(addUserFail(error));
+  }
+}
 function* fetchUsers() {
   try {
     const response = yield call(getUsers)
@@ -76,26 +89,14 @@ function* onDeleteUser({ payload: user }) {
   }
 }
 
-function* onAddNewUser({ payload: user }) {
-
-  try {
-    const response = yield call(addNewUser, user)
-
-    yield put(addUserSuccess(response))
-    toast.success("تماس با موفقیت اضافه شد", { autoClose: 2000 });
-  } catch (error) {
-
-    yield put(addUserFail(error))
-    toast.error("تماس اضافه شد ناموفق بود", { autoClose: 2000 });
-  }
-}
 
 function* contactsSaga() {
-  yield takeEvery(GET_USERS, fetchUsers)
-  yield takeEvery(GET_USER_PROFILE, fetchUserProfile)
-  yield takeEvery(ADD_NEW_USER, onAddNewUser)
-  yield takeEvery(UPDATE_USER, onUpdateUser)
-  yield takeEvery(DELETE_USER, onDeleteUser)
+  yield takeEvery(GET_OPTIONS, fetchOptions);
+  yield takeEvery(GET_USERS, fetchUsers);
+  yield takeEvery(GET_USER_PROFILE, fetchUserProfile);
+  yield takeEvery(ADD_NEW_USER, onAddNewUser);
+  yield takeEvery(UPDATE_USER, onUpdateUser);
+  yield takeEvery(DELETE_USER, onDeleteUser);
 }
 
 export default contactsSaga;

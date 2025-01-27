@@ -15,8 +15,15 @@ const INIT_STATE = {
   users: [],
   userProfile: {},
   error: {},
-  loading: true
-}
+  loading: false,
+
+  // می‌توانیم برای نگه‌داشتن دیتاهای دریافتی از /preData از این فیلد استفاده کنیم
+  options: {
+    teams: [],
+    units: [],
+    employmentStatuses: [],
+  },
+};
 
 const contacts = (state = INIT_STATE, action) => {
   switch (action.type) {
@@ -25,12 +32,21 @@ const contacts = (state = INIT_STATE, action) => {
         ...state,
         loading: true,
       };
+
     case GET_OPTIONS_SUCCESS:
       return {
         ...state,
         loading: false,
-        options: action.payload,
+        // در پاسخ API شما، آبجکتی دارید که employmentStatuses، teams و units در آن هست.
+        // می‌توانید مستقیماً همان را در استور بگذارید یا اگر خواستید جداگانه ذخیره کنید.
+        options: {
+          ...state.options,
+          employmentStatuses: action.payload.employmentStatuses,
+          teams: action.payload.teams,
+          units: action.payload.units,
+        },
       };
+
     case GET_OPTIONS_FAIL:
       return {
         ...state,

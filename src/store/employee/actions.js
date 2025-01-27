@@ -16,18 +16,18 @@ import {
   DELETE_USER_FAIL, GET_OPTIONS, GET_OPTIONS_SUCCESS, GET_OPTIONS_FAIL,
 } from "./actionTypes"
 
-
+// Action Creator اصلی که شروع درخواست را اعلام می‌کند
 export const getOptionsRequest = () => ({
   type: GET_OPTIONS,
 });
 
-// Action برای موفقیت دریافت گزینه‌ها
+// در صورت موفقیت‌آمیز بودن درخواست
 export const getOptionsSuccess = (options) => ({
   type: GET_OPTIONS_SUCCESS,
   payload: options,
 });
 
-// Action برای شکست دریافت گزینه‌ها
+// در صورت شکست درخواست
 export const getOptionsFail = (error) => ({
   type: GET_OPTIONS_FAIL,
   payload: error,
@@ -106,3 +106,4 @@ export const deleteUserFail = error => ({
   type: DELETE_USER_FAIL,
   payload: error,
 })
+

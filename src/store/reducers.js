@@ -13,7 +13,7 @@ import Profile from "./auth/profile/reducer";
 import JobReducer from "./jobs/reducer";
 
 
-import contacts from "./contacts/reducer";
+import contacts from "./employee/reducer";
 
 
 import Dashboard from "./dashboard/reducer";

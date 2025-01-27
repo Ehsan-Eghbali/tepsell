@@ -37,7 +37,7 @@ import {
     addNewUser as onAddNewUser,
     updateUser as onUpdateUser,
     deleteUser as onDeleteUser, getOptionsRequest,
-} from "/src/store/contacts/actions";
+} from "/src/store/employee/actions";
 import { isEmpty } from "lodash";
 
 //redux
@@ -45,16 +45,48 @@ import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import { ToastContainer } from "react-toastify";
 
+// const EmployeesList = () => {
+//     const dispatch = useDispatch();
+//
+//     useEffect(() => {
+//         // درخواست گرفتن لیست teams و units
+//         dispatch(getOptionsRequest());
+//     }, [dispatch]);
+//
+//     // گرفتن داده از ریداکس
+//     const { options, loading } = useSelector((state) => state.contacts);
+//
+//     // options.teams و options.units اینجا قابل‌دسترسی است
+//     console.log("teams => ", options?.teams);
+//     console.log("units => ", options?.units);
+//
+//     /* ... بقیه کدهای کامپوننت ... */
+//
+//     return (
+//         <>
+//             {/* ... */}
+//         </>
+//     );
+// };
+
 const EmployeesList = () => {
     document.title = "لیست پرسنل ";
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [contact, setContact] = useState();
+    const { options } = useSelector((state) => state.contacts);
+
     // validation
+    useEffect(() => {
+        // درخواست گرفتن لیست teams و units
+        dispatch(getOptionsRequest());
+    }, [dispatch]);
     const validation = useFormik({
         enableReinitialize: true,
+
         initialValues: {
             name: (contact && contact.name) || "",
+            lastname: (contact && contact.lastname) || "",
             phonenumber: (contact && contact.phonenumber) || "",
             Personnelcode: (contact && contact.Personnelcode) || "",
             tags: (contact && contact.tags) || "",
@@ -65,20 +97,20 @@ const EmployeesList = () => {
             jobposition: (contact && contact.jobposition) || "",
         },
         validationSchema: Yup.object({
-            name: Yup.string().required("لطفا نام خود را وارد کنید"),
-            designation: Yup.string().required("لطفا نام خود را وارد کنید"),
-            tags: Yup.array().required("لطفا برچسب را وارد کنید"),
-            status: Yup.array().required("لطفا وضعیت را وارد کنید"),
-            unit: Yup.array().required("لطفا وضعیت را وارد کنید"),
+            name: Yup.string().required("لطفا نام را وارد کنید"),
+            lastname: Yup.string().required("لطفا نام خانوادگی را وارد کنید"),
+            Personnelcode: Yup.number()
+                .typeError("کد پرسنلی باید عدد باشد")
+                .required("لطفا کد پرسنلی را وارد کنید"),
+            phonenumber: Yup.string().required("لطفا شماره تماس را وارد کنید"),
+            // birthday: Yup.string().required("لطفا تاریخ تولد را وارد کنید"),
             email: Yup.string()
-                .matches(
-                    /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                    "لطفا ایمیل معتبر وارد نمایید"
-                )
-                .required("لطفا ادرس ایمیل خود را وارد کنید"),
-            projects: Yup.string().required("لطفا پروژه خود را وارد کنید"),
+                .email("ایمیل معتبر نیست")
+                .required("لطفا ایمیل را وارد کنید"),
+            jobposition: Yup.string().required("لطفا سمت شغلی را وارد کنید"),
         }),
         onSubmit: (values) => {
+            console.log("Submit triggered with values => ", values); // لاگ برای تست
             if (isEdit) {
                 const updateUser = {
                     id: contact.id,
@@ -97,14 +129,13 @@ const EmployeesList = () => {
                 setIsEdit(false);
             } else {
                 const newUser = {
-                    id: Math.floor(Math.random() * (30 - 20)) + 20,
-                    name: values["name"],
-                    designation: values["designation"],
-                    email: values["email"],
-                    tags: values["tags"],
-                    status: user.status,
-                    unit: user.unit,
-                    projects: values["projects"],
+                    first_name: values.name,
+                    last_name: values.lastname,
+                    personnel_code: values.Personnelcode,
+                    mobile_phone: values.phonenumber,
+                    date_of_birth: values.birthday,    // تاریخ تولد
+                    email: values.email,
+                    position_chart: values.jobposition,
                 };
                 // save new user
                 dispatch(onAddNewUser(newUser));
@@ -126,11 +157,6 @@ const EmployeesList = () => {
         users, loading
     } = useSelector(ContactsProperties);
 
-    const { options } = useSelector((state) => state.contacts);
-
-    useEffect(() => {
-        dispatch(getOptionsRequest()); // گرفتن گزینه‌ها از بک‌اند
-    }, [dispatch]);
     const [isLoading, setLoading] = useState(loading);
 
     const [modal, setModal] = useState(false);
@@ -538,26 +564,20 @@ const EmployeesList = () => {
                                             ) : null}
                                         </div>
                                         <div className="mb-3">
-                                            <Label>کسب و کار</Label>
+                                            <Label>تیم (Team)</Label>
                                             <select
-                                                name="tags"
+                                                name="team"
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
-                                                multiple={false}
-                                                value={validation.values.tags || ""}
-                                                invalid={validation.touched.tags && validation.errors.tags ? true : undefined}
+                                                value={validation.values.team || ""}  // مقدار پیش‌فرض در formik
                                             >
                                                 <option value="">انتخاب کنید</option>
-                                                <option value="تپسل">تپسل</option>
-                                                <option value="فانتوری">فانتوری</option>
-                                                <option value="متریکس">متریکس</option>
-                                                <option value="مدیاهاوس">مدیاهاوس</option>
-                                                <option value="متیس">متیس</option>
-                                                <option value="آیژن">آیژن</option>
-                                                <option value="آتنا">آتنا</option>
-                                                <option value="گپیفای">گپیفای</option>
-                                                <option value="دلفین">دلفین</option>
+                                                {options.teams && options.teams.map((team) => (
+                                                    <option key={team.ID} value={team.ID}>
+                                                        {team.Name}
+                                                    </option>
+                                                ))}
                                             </select>
                                             {validation.touched.tags && validation.errors.tags ? (
                                                 <FormFeedback type="invalid">
@@ -570,7 +590,7 @@ const EmployeesList = () => {
                                         <div className="mb-3">
                                             <Label>وضعیت همکاری</Label>
                                             <select
-                                                name="status"
+                                                name="employement_status"
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
@@ -578,8 +598,12 @@ const EmployeesList = () => {
                                                 value={validation.values.status || ""}
                                                 invalid={validation.touched.status && validation.errors.status ? true : undefined}
                                             >
-                                                <option>درحال همکاری</option>
-                                                <option>پایان همکاری</option>
+                                                <option value="">انتخاب کنید</option>
+                                                {options.employmentStatuses && options.employmentStatuses.map((employmentStatus) => (
+                                                    <option key={employmentStatus.id} value={employmentStatus.id}>
+                                                        {employmentStatus.name}
+                                                    </option>
+                                                ))}
                                             </select>
 
                                             {validation.touched.status && validation.errors.status ? (
@@ -591,27 +615,20 @@ const EmployeesList = () => {
                                         </div>
 
                                         <div className="mb-3">
-                                            <Label>واحد</Label>
+                                            <Label>واحد (Unit)</Label>
                                             <select
                                                 name="unit"
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.unit || ""}
-                                                invalid={
-                                                    validation.touched.unit && validation.errors.unit ? true : undefined
-                                                }
                                             >
-                                                <option>فنی</option>
-                                                <option>موفقیت مشتری</option>
-                                                <option>مارکتینگ</option>
-                                                <option>فروش</option>
-                                                <option>پشتیبانی</option>
-                                                <option>استودیو</option>
-                                                <option>محصول</option>
-                                                <option>مالی</option>
-                                                <option>منابع انسانی</option>
-                                                <option>زیرساخت و it</option>
+                                                <option value="">انتخاب کنید</option>
+                                                {options.units && options.units.map((unit) => (
+                                                    <option key={unit.ID} value={unit.ID}>
+                                                        {unit.Name}
+                                                    </option>
+                                                ))}
                                             </select>
 
                                             {validation.touched.unit && validation.errors.unit ? (

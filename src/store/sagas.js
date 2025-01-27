@@ -7,7 +7,7 @@ import ForgetSaga from "./auth/forgetpwd/saga";
 import ProfileSaga from "./auth/profile/saga";
 import LayoutSaga from "./layout/saga";
 import jobsSaga from "./jobs/saga";
-import contactsSaga from "./contacts/saga";
+import contactsSaga from "./employee/saga";
 import dashboardSaga from "./dashboard/saga";
 import dashboardJobSaga from "./dashboard-jobs/saga";
 

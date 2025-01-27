@@ -11,8 +11,8 @@ export * from "./auth/profile/actions";
 export * from "./jobs/actions";
 
 
-// contacts
-export * from "./contacts/actions";
+// employee
+export * from "./employee/actions";
 
 
 //dashboard

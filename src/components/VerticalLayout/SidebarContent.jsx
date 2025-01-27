@@ -157,12 +157,12 @@ const SidebarContent = (props) => {
                   <Link to="/employees-List">{props.t("لیست همکاران")}</Link>
                 </li>
                 {/*<li>*/}
-                {/*  <Link to="/contacts-grid">*/}
+                {/*  <Link to="/employee-grid">*/}
                 {/*    {props.t("حکم کارگزینی  ")}*/}
                 {/*  </Link>*/}
                 {/*</li>*/}
                 {/*<li>*/}
-                {/*  <Link to="/contacts-profile">{props.t("پروفایل")}</Link>*/}
+                {/*  <Link to="/employee-profile">{props.t("پروفایل")}</Link>*/}
                 {/*</li>*/}
               </ul>
             </li>
