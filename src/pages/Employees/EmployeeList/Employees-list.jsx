@@ -88,31 +88,31 @@ const EmployeesList = () => {
         enableReinitialize: true,
 
         initialValues: {
-            name: (contact && contact.name) || "",
-            lastname: (contact && contact.lastname) || "",
-            phonenumber: (contact && contact.phonenumber) || "",
-            Personnelcode: (contact && contact.Personnelcode) || "",
-            tags: (contact && contact.tags) || "",
-            birthday: (contact && contact.birthday) || "",
-            status: (contact && contact.status) || "",
-            unit: (contact && contact.unit) || "",
-            email: (contact && contact.email) || "",
-            jobposition: (contact && contact.jobposition) || "",
+            name: "",
+            lastname: "",
+            phonenumber: "",
+            Personnelcode: "",
+            birthday: "",
+            email: "",
+            position_chart: "",
+            team_id: "",
+            unit_id: "",
+            employment_status_id: "",
         },
         validationSchema: Yup.object({
-            name: Yup.string().required("لطفا نام را وارد کنید"),
-            lastname: Yup.string().required("لطفا نام خانوادگی را وارد کنید"),
-            Personnelcode: Yup.number()
-                .typeError("کد پرسنلی باید عدد باشد")
-                .required("لطفا کد پرسنلی را وارد کنید"),
-            phonenumber: Yup.string().required("لطفا شماره تماس را وارد کنید"),
-            // birthday: Yup.string().required("لطفا تاریخ تولد را وارد کنید"),
-            email: Yup.string()
-                .email("ایمیل معتبر نیست")
-                .required("لطفا ایمیل را وارد کنید"),
-            jobposition: Yup.string().required("لطفا سمت شغلی را وارد کنید"),
+            name: Yup.string().required("نام لازم است"),
+            lastname: Yup.string().required("نام خانوادگی لازم است"),
+            Personnelcode: Yup.number().required("کد پرسنلی لازم است"),
+            phonenumber: Yup.string().required("شماره موبایل لازم است"),
+            birthday: Yup.string().required("تاریخ تولد لازم است"),
+            email: Yup.string().required("ایمیل لازم است"),
+            position_chart: Yup.string(),
+            team_id: Yup.number(),
+            unit_id: Yup.number(),
+            employment_status_id: Yup.number(),
         }),
         onSubmit: (values) => {
+            console.log(values);
             if (isEdit) {
                 const updateUser = {
                     id: contact.id,
@@ -120,7 +120,7 @@ const EmployeesList = () => {
                     designation: values.designation,
                     tags: values.tags,
                     status: values.status,
-                    unit: values.unit,
+                    unit: values.unit_id,
                     email: values.email,
                     projects: values.projects,
                 };
@@ -133,11 +133,16 @@ const EmployeesList = () => {
                 const newUser = {
                     first_name: values.name,
                     last_name: values.lastname,
-                    personnel_code: values.Personnelcode,
+                    personnel_code: parseInt(values.Personnelcode, 10),
                     mobile_phone: values.phonenumber,
-                    date_of_birth: values.birthday,    // تاریخ تولد
+                    date_of_birth: values.birthday,
                     email: values.email,
-                    position_chart: values.jobposition,
+                    position_chart: values.position_chart,
+                    team_id: values.team_id ? parseInt(values.team_id, 10) : null,
+                    unit_id: values.unit_id ? parseInt(values.unit_id, 10) : null,
+                    employment_status_id: values.employment_status_id
+                        ? parseInt(values.employment_status_id, 10)
+                        : null,
                 };
                 // save new user
                 dispatch(onAddNewUser(newUser));
@@ -335,7 +340,7 @@ const EmployeesList = () => {
             
             {
                 header: 'وضعیت همکاری ',
-                accessorKey: 'status',
+                accessorKey: 'employment_status',
                 enableColumnFilter: false,
                 enableSorting: false,
                 cell: (cell) => {
@@ -530,16 +535,26 @@ const EmployeesList = () => {
                                                 calendarPosition="bottom-right"
                                                 name="birthday"
                                                 placeholder="تاریخ تولد"
-                                                className="form-control"
                                                 id="formrow-birthday"
                                                 value={validation.values.birthday}
+                                                onChange={(value) => {
+                                                    // value ممکن است یک DateObject یا آرایه باشد
+                                                    // بسته به این که چندتایی انتخاب می‌کنید یا نه
+                                                    if (!value) {
+                                                        validation.setFieldValue("birthday", "");
+                                                    } else {
+                                                        // فرمت میلادی یا شمسی که می‌خواهید در state باشد
+                                                        validation.setFieldValue("birthday", value.format("YYYY-MM-DD"));
+                                                    }
+                                                }}
+                                                className={`form-control ${
+                                                    validation.touched.birthday && validation.errors.birthday ? "is-invalid" : ""
+                                                }`}
                                                 style={{ height: "38px", width: "100%" }}
                                             />
-                                            {validation.errors.birthday && validation.touched.birthday ? (
-                                                <FormFeedback type="invalid">
-                                                    {validation.errors.birthday}
-                                                </FormFeedback>
-                                            ) : null}
+                                            {validation.errors.birthday && validation.touched.birthday && (
+                                                <FormFeedback type="invalid">{validation.errors.birthday}</FormFeedback>
+                                            )}
                                         </div>
                                         <div className="mb-3">
                                             <Label>ایمیل</Label>
@@ -564,11 +579,11 @@ const EmployeesList = () => {
                                         <div className="mb-3">
                                             <Label>تیم (Team)</Label>
                                             <select
-                                                name="team"
+                                                name="team_id" // هم‌نام با schema
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
-                                                value={validation.values.team || ""}  // مقدار پیش‌فرض در formik
+                                                value={validation.values.team_id || ""}
                                             >
                                                 <option value="">انتخاب کنید</option>
                                                 {options.teams && options.teams.map((team) => (
@@ -577,49 +592,45 @@ const EmployeesList = () => {
                                                     </option>
                                                 ))}
                                             </select>
-                                            {validation.touched.tags && validation.errors.tags ? (
+                                            {validation.errors.team_id && validation.touched.team_id && (
                                                 <FormFeedback type="invalid">
-                                                    {validation.errors.tags}
+                                                    {validation.errors.team_id}
                                                 </FormFeedback>
-                                            ) : null}
+                                            )}
                                         </div>
 
 
                                         <div className="mb-3">
                                             <Label>وضعیت همکاری</Label>
                                             <select
-                                                name="employement_status"
+                                                name="employment_status_id"
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
-                                                multiple={false}
-                                                value={validation.values.status || ""}
-                                                invalid={validation.touched.status && validation.errors.status ? true : undefined}
+                                                value={validation.values.employment_status_id || ""}
                                             >
                                                 <option value="">انتخاب کنید</option>
-                                                {options.employmentStatuses && options.employmentStatuses.map((employmentStatus) => (
-                                                    <option key={employmentStatus.id} value={employmentStatus.id}>
-                                                        {employmentStatus.name}
+                                                {options.employmentStatuses && options.employmentStatuses.map((item) => (
+                                                    <option key={item.id} value={item.id}>
+                                                        {item.name}
                                                     </option>
                                                 ))}
                                             </select>
-
-                                            {validation.touched.status && validation.errors.status ? (
+                                            {validation.errors.employment_status_id && validation.touched.employment_status_id && (
                                                 <FormFeedback type="invalid">
-                                                    {" "}
-                                                    {validation.errors.status}{" "}
+                                                    {validation.errors.employment_status_id}
                                                 </FormFeedback>
-                                            ) : null}
+                                            )}
                                         </div>
 
                                         <div className="mb-3">
                                             <Label>واحد (Unit)</Label>
                                             <select
-                                                name="unit"
+                                                name="unit_id"
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
-                                                value={validation.values.unit || ""}
+                                                value={validation.values.unit_id || ""}
                                             >
                                                 <option value="">انتخاب کنید</option>
                                                 {options.units && options.units.map((unit) => (
@@ -628,30 +639,25 @@ const EmployeesList = () => {
                                                     </option>
                                                 ))}
                                             </select>
-
-                                            {validation.touched.unit && validation.errors.unit ? (
+                                            {validation.errors.unit_id && validation.touched.unit_id && (
                                                 <FormFeedback type="invalid">
-                                                    {" "}
-                                                    {validation.errors.unit}{" "}
+                                                    {validation.errors.unit_id}
                                                 </FormFeedback>
-                                            ) : null}
+                                            )}
                                         </div>
                                         <div className="mb-3">
                                             <Label>سمت شغلی</Label>
                                             <Input
                                                 type="text"
-                                                name="jobposition"
+                                                name="position_chart"
                                                 className="form-control"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
-                                                value={validation.values.jobposition || ""}
-                                                invalid={
-                                                    !!(validation.touched.jobposition && validation.errors.jobposition)
-                                                }
+                                                value={validation.values.position_chart || ""}
                                             />
-                                            {validation.touched.jobposition && validation.errors.jobposition ? (
+                                            {validation.touched.position_chart && validation.errors.position_chart ? (
                                                 <FormFeedback type="invalid">
-                                                    {validation.errors.jobposition}
+                                                    {validation.errors.position_chart}
                                                 </FormFeedback>
                                             ) : null}
                                         </div>
