@@ -268,6 +268,18 @@ const EmployeesList = () => {
                 },
             },
             {
+                header: 'کسب و کار',
+                accessorKey: 'unit.name',
+                enableColumnFilter: false,
+                enableSorting: true,
+            },
+            {
+                header: 'تیم',
+                accessorKey: 'team.name',
+                enableColumnFilter: false,
+                enableSorting: true,
+            },
+            {
                 header: "وضعیت همکاری",
                 accessorKey: "employment_status.status",
                 // اگر توی آبجکت نهایی: "employment_status": {"status": "..."}
@@ -523,6 +535,7 @@ const EmployeesList = () => {
                                             )}
                                         </div>
 
+
                                         {/* تیم (Team) */}
                                         <div className="mb-3">
                                             <Label>تیم (Team)</Label>
@@ -575,7 +588,7 @@ const EmployeesList = () => {
 
                                         {/* واحد (Unit) */}
                                         <div className="mb-3">
-                                            <Label>واحد (Unit)</Label>
+                                            <Label>واحد</Label>
                                             <select
                                                 name="unit_id"
                                                 className="form-select"
