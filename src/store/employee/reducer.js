@@ -57,8 +57,8 @@ const contacts = (state = INIT_STATE, action) => {
     case GET_USERS_SUCCESS:
       return {
         ...state,
-        users: action.payload,
-        loading: true
+        users: action.payload,  // لیست دریافتی از API
+        loading: false,
       }
 
     case GET_USERS_FAIL:
@@ -121,7 +121,6 @@ const contacts = (state = INIT_STATE, action) => {
         ...state,
         error: action.payload,
       }
-
     default:
       return state
   }

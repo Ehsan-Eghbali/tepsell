@@ -51,12 +51,17 @@ function* onAddNewUser({ payload: user }) {
 }
 function* fetchUsers() {
   try {
-    const response = yield call(getUsers)
-    yield put(getUsersSuccess(response))
+    // قبلاً از یه مسیر فیک یا متد fakebackend_helper صدا می‌زدید
+    // حالا می‌خواهید مستقیم از API بگیرید:
+    const response = yield call(axios.get, "https://hrtapsell.ir/api/employee/getAll");
+
+    // در صورت موفقیت، داده را در ریداکس ذخیره می‌کنیم
+    yield put(getUsersSuccess(response.data));
   } catch (error) {
-    yield put(getUsersFail(error))
+    yield put(getUsersFail(error));
   }
 }
+
 
 function* fetchUserProfile() {
   try {

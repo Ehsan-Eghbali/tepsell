@@ -81,6 +81,9 @@ const EmployeesList = () => {
         // درخواست گرفتن لیست teams و units
         dispatch(getOptionsRequest());
     }, [dispatch]);
+    useEffect(() => {
+        dispatch(onGetUsers());
+    }, [dispatch]);
     const validation = useFormik({
         enableReinitialize: true,
 
@@ -110,7 +113,6 @@ const EmployeesList = () => {
             jobposition: Yup.string().required("لطفا سمت شغلی را وارد کنید"),
         }),
         onSubmit: (values) => {
-            console.log("Submit triggered with values => ", values); // لاگ برای تست
             if (isEdit) {
                 const updateUser = {
                     id: contact.id,
@@ -229,28 +231,7 @@ const EmployeesList = () => {
         () => [
             {
                 header: "کد پرسنلی",
-                accessorKey: "img",
-                cell: (cell) => (
-                    <>
-                        {!cell.getValue() ? (
-                            <div className="avatar-xs">
-                                {/* <span className="avatar-title rounded-circle">{cell.row.original.name.charAt(0)} </span> */}
-                            </div>
-                        ) : (
-                            <div>
-                                {/*<img className="rounded-circle avatar-xs" src={cell.getValue()} alt="" />*/}
-                            </div>
-                        )}
-                    </>
-                ),
-                enableColumnFilter: false,
-                enableSorting: true,
-            },
-            {
-                header: 'نام ',
-                accessorKey: 'name',
-                enableColumnFilter: false,
-                enableSorting: true,
+                accessorKey: "personnel_code",
                 cell: (cell) => {
                     return (
                         <>
@@ -260,11 +241,28 @@ const EmployeesList = () => {
                             <p className="text-muted mb-0">{cell.row.original.designation}</p>
                         </>
                     )
+                },
+                enableColumnFilter: false,
+                enableSorting: true,
+            },
+            {
+                header: 'نام ',
+                accessorKey: 'first_name',
+                enableColumnFilter: false,
+                enableSorting: true,
+                cell: (cell) => {
+                    return (
+                        <>
+                            <h5 className='font-size-14 mb-1'>
+                                <Link to='#' className='text-dark'>{cell.getValue()}</Link>
+                            </h5>
+                        </>
+                    )
                 }
             },
             {
                 header: 'نام خانوادگی',
-                accessorKey: 'lastName',
+                accessorKey: 'last_name',
                 enableColumnFilter: false,
                 enableSorting: true,
                 cell: (cell) => {
@@ -356,7 +354,7 @@ const EmployeesList = () => {
             },
             {
                 header: ' شماره تماس',
-                accessorKey: 'projects',
+                accessorKey: 'mobile_phone',
                 enableColumnFilter: false,
                 enableSorting: true,
             },
