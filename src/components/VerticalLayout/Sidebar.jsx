@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 
 
-import Pegah from "../../assets/images/logoTop.png";
+import Pegah from "../../assets/images/loglog.png";
 import PegahSm from "../../assets/images/Pegah.png";
 
 const Sidebar = (props) => {
