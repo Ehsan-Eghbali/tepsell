@@ -36,7 +36,7 @@ function* onAddNewUser({ payload: user }) {
   try {
     const response = yield call(
         axios.post,
-        "http://hrtapsell.ir/api/employee/create",
+        "https://hrtapsell.ir/api/employee/create",
         user,
         {
           headers: {
