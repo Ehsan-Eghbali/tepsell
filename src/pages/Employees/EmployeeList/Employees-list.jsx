@@ -6,21 +6,7 @@ import persian_fa from "react-date-object/locales/persian_fa"
 import withRouter from "../../../components/Common/withRouter";
 import TableContainer from "../../../components/Common/TableContainer";
 import Spinners from "../../../components/Common/Spinner"
-import {
-    Card,
-    CardBody,
-    Col,
-    Container,
-    Row,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    Label,
-    FormFeedback,
-    Input,
-    Form,
-    Button,
-} from "reactstrap";
+import { Card,CardBody,Col,Container,Row,Modal,ModalHeader,ModalBody,Label,FormFeedback,Input,Form,Button,} from "reactstrap";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -311,14 +297,13 @@ const EmployeesList = () => {
                 enableColumnFilter: false,
                 enableSorting: true,
                 cell: (cell) => {
+                    const value = cell.getValue();
                     return (
                         <div>
-                            {
-                                cell.getValue()?.map((item, index) => (
-                                    <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
-                                        key={index}>{item}</Link>
-                                ))
-                            }
+                            {Array.isArray(value) ? value.map((item, index) => (
+                                <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
+                                    key={index}>{item}</Link>
+                            )) : null}
                         </div>
                     );
                 },
@@ -344,15 +329,13 @@ const EmployeesList = () => {
                 enableColumnFilter: false,
                 enableSorting: false,
                 cell: (cell) => {
+                    const value = cell.getValue();
                     return (
                         <div>
-                            {
-                                cell.getValue()?.map((item, index) => (
-
-                                    <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
-                                        key={index}>{item}</Link>
-                                ))
-                            }
+                            {Array.isArray(value) ? value.map((item, index) => (
+                                <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
+                                    key={index}>{item}</Link>
+                            )) : null}
                         </div>
                     );
                 },

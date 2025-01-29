@@ -145,6 +145,30 @@ const SidebarContent = (props) => {
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
 
+            <li className="menu-title">{props.t("مدیریت پنل")}</li>
+            <li>
+              <Link to="/#" className="has-arrow ">
+                <i className="bx bxs-user-detail"></i>
+                <span>{props.t("دسته بندی ها   ")}</span>
+              </Link>
+              <ul className="sub-menu" aria-expanded="false">
+                <li>
+                  <Link to="/employees-List">{props.t("افزودن تیم ")}</Link>
+                </li>
+                <li>
+                  <Link to="/employees-List">{props.t("افزودن واحد ")}</Link>
+                </li>
+                {/*<li>*/}
+                {/*  <Link to="/employee-grid">*/}
+                {/*    {props.t("حکم کارگزینی  ")}*/}
+                {/*  </Link>*/}
+                {/*</li>*/}
+                {/*<li>*/}
+                {/*  <Link to="/employee-profile">{props.t("پروفایل")}</Link>*/}
+                {/*</li>*/}
+              </ul>
+            </li>
+
             <li className="menu-title">{props.t("اطلاعات پرسنلی")}</li>
 
             <li>
@@ -168,7 +192,9 @@ const SidebarContent = (props) => {
             </li>
 
 
-            {/*<li className="menu-title">جذب و استخدام</li>*/}
+
+
+            {/* <li className="menu-title">جذب و استخدام</li>*/}
             {/*<li>*/}
             {/*  <Link to="/#"className="has-arrow ">*/}
             {/*    <i className="bx bx-briefcase-alt"></i>*/}
@@ -185,7 +211,7 @@ const SidebarContent = (props) => {
             {/*      <Link to="/job-details">{props.t("جزئیات مشاغل")}</Link>*/}
             {/*    </li>*/}
             {/*  </ul>*/}
-            {/*</li>*/}
+            {/*</li> */}
 
             {/*<li>*/}
             {/*  <Link to="/#" className="has-arrow ">*/}
