@@ -1,12 +1,31 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import DatePicker from "react-multi-date-picker"
-import persian from "react-date-object/calendars/persian"
-import persian_fa from "react-date-object/locales/persian_fa"
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
 import withRouter from "../../../components/Common/withRouter";
 import TableContainer from "../../../components/Common/TableContainer";
+<<<<<<< HEAD
 import Spinners from "../../../components/Common/Spinner"
 import { Card,CardBody,Col,Container,Row,Modal,ModalHeader,ModalBody,Label,FormFeedback,Input,Form,Button,} from "reactstrap";
+=======
+import Spinners from "../../../components/Common/Spinner";
+import {
+    Card,
+    CardBody,
+    Col,
+    Container,
+    Row,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    Label,
+    FormFeedback,
+    Input,
+    Form,
+    Button,
+} from "reactstrap";
+>>>>>>> b39ec0180b1b16f98720339b3352280dd842226c
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -16,13 +35,12 @@ import Breadcrumbs from "/src/components/Common/Breadcrumb";
 import DeleteModal from "/src/components/Common/DeleteModal";
 
 //redux
-
-
 import {
     getUsers as onGetUsers,
     addNewUser as onAddNewUser,
     updateUser as onUpdateUser,
-    deleteUser as onDeleteUser, getOptionsRequest,
+    deleteUser as onDeleteUser,
+    getOptionsRequest,
 } from "/src/store/employee/actions";
 import { isEmpty } from "lodash";
 
@@ -31,59 +49,123 @@ import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import { ToastContainer } from "react-toastify";
 
-// const EmployeesList = () => {
-//     const dispatch = useDispatch();
-//
-//     useEffect(() => {
-//         // درخواست گرفتن لیست teams و units
-//         dispatch(getOptionsRequest());
-//     }, [dispatch]);
-//
-//     // گرفتن داده از ریداکس
-//     const { options, loading } = useSelector((state) => state.contacts);
-//
-//     // options.teams و options.units اینجا قابل‌دسترسی است
-//     console.log("teams => ", options?.teams);
-//     console.log("units => ", options?.units);
-//
-//     /* ... بقیه کدهای کامپوننت ... */
-//
-//     return (
-//         <>
-//             {/* ... */}
-//         </>
-//     );
-// };
-
 const EmployeesList = () => {
-    document.title = "لیست پرسنل ";
+    document.title = "لیست پرسنل";
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [contact, setContact] = useState();
-    const { options } = useSelector((state) => state.contacts);
 
-    // validation
+    // فراخوانی API برای گرفتن تیم‌ها، واحدها و ... (options) و همچنین لیست کاربران
     useEffect(() => {
-        // درخواست گرفتن لیست teams و units
         dispatch(getOptionsRequest());
-    }, [dispatch]);
-    useEffect(() => {
         dispatch(onGetUsers());
     }, [dispatch]);
+
+    // گرفتن استور ریداکس
+    const ContactsProperties = createSelector(
+        (state) => state.contacts,
+        (Contacts) => ({
+            users: Contacts.users,
+            loading: Contacts.loading,
+            options: Contacts.options,
+        })
+    );
+    const { users, loading, options } = useSelector(ContactsProperties);
+
+    // کنترل مدال و حالت ویرایش/غیروط
+    const [modal, setModal] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+
+    // برای اسپینر لودینگ
+    const [isLoading, setLoading] = useState(loading);
+
+    // برای نگه داشتن کاربر انتخاب شده جهت ویرایش یا حذف
+    const [contact, setContact] = useState();
+
+    // اگر لیست کاربرها خالی باشد، یک بار دیگر درخواست گرفتن کاربران
+    useEffect(() => {
+        if (users && !users.length) {
+            dispatch(onGetUsers());
+            setIsEdit(false);
+        }
+    }, [dispatch, users]);
+
+    // ست کردن اولیه‌ی contact
+    useEffect(() => {
+        setContact(users);
+        setIsEdit(false);
+    }, [users]);
+
+    // اگر در حالت ویرایش هستیم اما users خالی نیست
+    useEffect(() => {
+        if (!isEmpty(users) && !!isEdit) {
+            setContact(users);
+            setIsEdit(false);
+        }
+    }, [users]);
+
+    // تابع برای باز/بسته کردن مدال
+    const toggle = () => {
+        setModal(!modal);
+    };
+
+    // کلیک روی دکمه «افزودن همکار جدید»
+    const handleUserClicks = () => {
+        setContact("");
+        setIsEdit(false);
+        toggle();
+    };
+
+    // کلیک روی آیکن ویرایش
+    const handleUserClick = (arg) => {
+        const user = arg;
+        setContact({
+            id: user.id,
+            // در صورتی که بخواهید فیلدهای فرمیک را پر کنید، همینجا مقداردهی کنید
+            name: user.first_name,
+            lastname: user.last_name,
+            phonenumber: user.mobile_phone,
+            Personnelcode: user.personnel_code,
+            birthday: user.date_of_birth,
+            email: user.email,
+            position_chart: user.position_chart,
+            team_id: user.team_id,
+            unit_id: user.unit_id,
+            employment_status_id: user.employment_status_id,
+            // ...
+        });
+        setIsEdit(true);
+        toggle();
+    };
+
+    // حذف کاربر
+    const [deleteModal, setDeleteModal] = useState(false);
+    const onClickDelete = (users) => {
+        setContact(users);
+        setDeleteModal(true);
+    };
+
+    const handleDeleteUser = () => {
+        if (contact && contact.id) {
+            dispatch(onDeleteUser(contact.id));
+        }
+        setContact("");
+        setDeleteModal(false);
+    };
+
+    // Validations با Formik
     const validation = useFormik({
         enableReinitialize: true,
-
         initialValues: {
-            name: "",
-            lastname: "",
-            phonenumber: "",
-            Personnelcode: "",
-            birthday: "",
-            email: "",
-            position_chart: "",
-            team_id: "",
-            unit_id: "",
-            employment_status_id: "",
+            name: contact?.name || "",
+            lastname: contact?.lastname || "",
+            phonenumber: contact?.phonenumber || "",
+            Personnelcode: contact?.Personnelcode || "",
+            birthday: contact?.birthday || "",
+            email: contact?.email || "",
+            position_chart: contact?.position_chart || "",
+            team_id: contact?.team_id || "",
+            unit_id: contact?.unit_id || "",
+            employment_status_id: contact?.employment_status_id || "",
         },
         validationSchema: Yup.object({
             name: Yup.string().required("نام لازم است"),
@@ -98,24 +180,30 @@ const EmployeesList = () => {
             employment_status_id: Yup.number(),
         }),
         onSubmit: (values) => {
-            console.log(values);
+            console.log("Formik Submit Values => ", values);
             if (isEdit) {
+                // ویرایش کاربر
                 const updateUser = {
                     id: contact.id,
-                    name: values.name,
-                    designation: values.designation,
-                    tags: values.tags,
-                    status: values.status,
-                    unit: values.unit_id,
+                    // فیلدهای لازم که باید سمت بک ارسال شود
+                    first_name: values.name,
+                    last_name: values.lastname,
+                    personnel_code: parseInt(values.Personnelcode, 10),
+                    mobile_phone: values.phonenumber,
+                    date_of_birth: values.birthday,
                     email: values.email,
-                    projects: values.projects,
+                    position_chart: values.position_chart,
+                    team_id: values.team_id ? parseInt(values.team_id, 10) : null,
+                    unit_id: values.unit_id ? parseInt(values.unit_id, 10) : null,
+                    employment_status_id: values.employment_status_id
+                        ? parseInt(values.employment_status_id, 10)
+                        : null,
                 };
-
-                // update user
                 dispatch(onUpdateUser(updateUser));
                 validation.resetForm();
                 setIsEdit(false);
             } else {
+                // افزودن کاربر جدید
                 const newUser = {
                     first_name: values.name,
                     last_name: values.lastname,
@@ -130,7 +218,6 @@ const EmployeesList = () => {
                         ? parseInt(values.employment_status_id, 10)
                         : null,
                 };
-                // save new user
                 dispatch(onAddNewUser(newUser));
                 validation.resetForm();
             }
@@ -138,160 +225,40 @@ const EmployeesList = () => {
         },
     });
 
-    const ContactsProperties = createSelector(
-        (state) => state.contacts,
-        (Contacts) => ({
-            users: Contacts.users,
-            loading: Contacts.loading
-        })
-    );
-
-    const {
-        users, loading
-    } = useSelector(ContactsProperties);
-
-    const [isLoading, setLoading] = useState(loading);
-
-    const [modal, setModal] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
-
-    useEffect(() => {
-        if (users && !users.length) {
-            dispatch(onGetUsers());
-            setIsEdit(false);
-        }
-    }, [dispatch, users]);
-
-    useEffect(() => {
-        setContact(users);
-        setIsEdit(false);
-    }, [users]);
-
-    useEffect(() => {
-        if (!isEmpty(users) && !!isEdit) {
-            setContact(users);
-            setIsEdit(false);
-        }
-    }, [users]);
-
-    const toggle = () => {
-        setModal(!modal);
-    };
-
-    const handleUserClick = (arg) => {
-        const user = arg;
-        setContact({
-            id: user.id,
-            name: user.name,
-            designation: user.designation,
-            email: user.email,
-            tags: user.tags,
-            status: user.status,
-            unit: user.unit,
-            projects: user.projects,
-        });
-        setIsEdit(true);
-
-        toggle();
-    };
-
-    //delete customer
-    const [deleteModal, setDeleteModal] = useState(false);
-
-    const onClickDelete = (users) => {
-        setContact(users);
-        setDeleteModal(true);
-    };
-
-    const handleDeleteUser = () => {
-        if (contact && contact.id) {
-            dispatch(onDeleteUser(contact.id));
-        }
-        setContact("");
-        setDeleteModal(false);
-    };
-
-
-    const handleUserClicks = () => {
-        setContact("");
-        setIsEdit(false);
-        toggle();
-    };
-
+    // ستون‌های جدول
     const columns = useMemo(
         () => [
             {
                 header: "کد پرسنلی",
                 accessorKey: "personnel_code",
-                cell: (cell) => {
-                    return (
-                        <>
-                            <h5 className='font-size-14 mb-1'>
-                                <Link to='#' className='text-dark'>{cell.getValue()}</Link>
-                            </h5>
-                            <p className="text-muted mb-0">{cell.row.original.designation}</p>
-                        </>
-                    )
-                },
-                enableColumnFilter: false,
-                enableSorting: true,
-            },
-            {
-                header: 'نام ',
-                accessorKey: 'first_name',
                 enableColumnFilter: false,
                 enableSorting: true,
                 cell: (cell) => {
                     return (
                         <>
-                            <h5 className='font-size-14 mb-1'>
-                                <Link to='#' className='text-dark'>{cell.getValue()}</Link>
-                            </h5>
-                        </>
-                    )
-                }
-            },
-            {
-                header: 'نام خانوادگی',
-                accessorKey: 'last_name',
-                enableColumnFilter: false,
-                enableSorting: true,
-                cell: (cell) => {
-                    return (
-                        <>
-                            <h5 className='font-size-14 mb-1'>
-                                <Link to='#' className='text-dark'>{cell.getValue()}</Link>
+                            <h5 className="font-size-14 mb-1">
+                                <Link to="#" className="text-dark">
+                                    {cell.getValue()}
+                                </Link>
                             </h5>
                         </>
                     );
                 },
             },
-            
             {
-                header: 'ایمیل',
-                accessorKey: 'email',
+                header: "نام",
+                accessorKey: "first_name",
                 enableColumnFilter: false,
                 enableSorting: true,
             },
             {
-                header: 'کسب و کار',
-                accessorKey: 'tags',
+                header: "نام خانوادگی",
+                accessorKey: "last_name",
                 enableColumnFilter: false,
                 enableSorting: true,
-                cell: (cell) => {
-                    return (
-                        <div>
-                            {
-                                cell.getValue()?.map((item, index) => (
-                                    <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
-                                        key={index}>{item}</Link>
-                                ))
-                            }
-                        </div>
-                    );
-                },
             },
             {
+<<<<<<< HEAD
                 header: 'واحد',
                 accessorKey: 'unit',
                 enableColumnFilter: false,
@@ -307,14 +274,18 @@ const EmployeesList = () => {
                         </div>
                     );
                 },
+=======
+                header: "ایمیل",
+                accessorKey: "email",
+>>>>>>> b39ec0180b1b16f98720339b3352280dd842226c
             },
             {
-                header: 'تاریخ تولد',
-                accessorKey: 'birthDate',
-                enableColumnFilter: false,
+                header: "تاریخ تولد",
+                accessorKey: "date_of_birth",
                 enableSorting: true,
                 cell: (cell) => {
                     const birthDate = cell.getValue();
+<<<<<<< HEAD
                     return (
                         <div>
                             {birthDate ? new Date(birthDate).toLocaleDateString('fa-IR') : 'نامشخص'}
@@ -338,52 +309,79 @@ const EmployeesList = () => {
                             )) : null}
                         </div>
                     );
+=======
+                    // اگر تاریخ به فرمت شمسی در دیتابیس باشد، مستقیم نمایش دهید
+                    // یا می‌توانید تبدیل کنید
+                    return <div>{birthDate || "نامشخص"}</div>;
+>>>>>>> b39ec0180b1b16f98720339b3352280dd842226c
                 },
             },
             {
-                header: ' شماره تماس',
-                accessorKey: 'mobile_phone',
+                header: 'کسب و کار',
+                accessorKey: 'unit.name',
                 enableColumnFilter: false,
                 enableSorting: true,
             },
             {
-                header: 'اقدامات',
+                header: 'تیم',
+                accessorKey: 'team.name',
+                enableColumnFilter: false,
+                enableSorting: true,
+            },
+            {
+                header: "وضعیت همکاری",
+                accessorKey: "employment_status.status",
+                // اگر توی آبجکت نهایی: "employment_status": {"status": "..."}
+                enableSorting: false,
+            },
+            {
+                header: "شماره تماس",
+                accessorKey: "mobile_phone",
+                enableColumnFilter: false,
+                enableSorting: true,
+            },
+            {
+                header: "اقدامات",
                 cell: (cellProps) => {
+                    const userData = cellProps.row.original;
                     return (
                         <div className="d-flex gap-3">
+                            {/* ویرایش */}
                             <Link
                                 to="#"
                                 className="text-success"
                                 onClick={() => {
-                                    const userData = cellProps.row.original;
                                     handleUserClick(userData);
                                 }}
                             >
-                                <i className="mdi mdi-pencil font-size-18" id="edittooltip" />
+                                <i className="mdi mdi-pencil font-size-18" />
                             </Link>
+                            {/* حذف */}
                             <Link
                                 to="#"
                                 className="text-danger"
                                 onClick={() => {
-                                    const userData = cellProps.row.original;
                                     onClickDelete(userData);
-                                }}>
-                                <i className="mdi mdi-delete font-size-18" id="deletetooltip" />
-                            </Link>
-                            <Link
-                                to="/employee/1"
-                                className="text-primary"
-
+                                }}
                             >
-                                <i className="mdi mdi-eye font-size-18" id="deletetooltip" />
+                                <i className="mdi mdi-delete font-size-18" />
+                            </Link>
+                            {/* مشاهده */}
+                            <Link to="/employee/1" className="text-primary">
+                                <i className="mdi mdi-eye font-size-18" />
                             </Link>
                         </div>
                     );
-                }
+                },
             },
         ],
         []
     );
+
+    // مدیریت اسپینر
+    useEffect(() => {
+        setLoading(loading);
+    }, [loading]);
 
     return (
         <>
@@ -404,12 +402,11 @@ const EmployeesList = () => {
                             <Col lg="12">
                                 <Card>
                                     <CardBody>
-
                                         <TableContainer
                                             columns={columns}
                                             data={users || []}
                                             isPagination={true}
-                                            isAddButton={true} // فعال کردن دکمه
+                                            isAddButton={true}
                                             handleUserClick={handleUserClicks}
                                             buttonClass="btn btn-success btn-rounded waves-effect waves-light addContact-modal custom-add-button"
                                             buttonName="افزودن همکار جدید"
@@ -423,10 +420,10 @@ const EmployeesList = () => {
                             </Col>
                         </Row>
                     )}
+
                     <Modal isOpen={modal} toggle={toggle}>
                         <ModalHeader toggle={toggle} tag="h4">
-                            {" "}
-                            {!!isEdit ? "ویرایش همکار" : "افزودن همکار"}
+                            {isEdit ? "ویرایش همکار" : "افزودن همکار"}
                         </ModalHeader>
                         <ModalBody>
                             <Form
@@ -438,8 +435,9 @@ const EmployeesList = () => {
                             >
                                 <Row>
                                     <Col xs={12}>
+                                        {/* نام */}
                                         <div className="mb-3">
-                                            <Label>نام </Label>
+                                            <Label>نام</Label>
                                             <Input
                                                 name="name"
                                                 type="text"
@@ -450,14 +448,16 @@ const EmployeesList = () => {
                                                     !!(validation.touched.name && validation.errors.name)
                                                 }
                                             />
-                                            {validation.touched.name && validation.errors.name ? (
+                                            {validation.touched.name && validation.errors.name && (
                                                 <FormFeedback type="invalid">
                                                     {validation.errors.name}
                                                 </FormFeedback>
-                                            ) : null}
+                                            )}
                                         </div>
+
+                                        {/* نام خانوادگی */}
                                         <div className="mb-3">
-                                            <Label> نام خانوادگی</Label>
+                                            <Label>نام خانوادگی</Label>
                                             <Input
                                                 name="lastname"
                                                 type="text"
@@ -465,35 +465,47 @@ const EmployeesList = () => {
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.lastname || ""}
                                                 invalid={
-                                                    !!(validation.touched.lastname && validation.errors.lastname)
+                                                    !!(
+                                                        validation.touched.lastname &&
+                                                        validation.errors.lastname
+                                                    )
                                                 }
                                             />
-                                            {validation.touched.lastname && validation.errors.lastname ? (
-                                                <FormFeedback type="invalid">
-                                                    {validation.errors.lastname}
-                                                </FormFeedback>
-                                            ) : null}
+                                            {validation.touched.lastname &&
+                                                validation.errors.lastname && (
+                                                    <FormFeedback type="invalid">
+                                                        {validation.errors.lastname}
+                                                    </FormFeedback>
+                                                )}
                                         </div>
+
+                                        {/* شماره تماس */}
                                         <div className="mb-3">
-                                            <Label> شماره تماس </Label>
+                                            <Label>شماره تماس</Label>
                                             <Input
                                                 name="phonenumber"
-                                                type="phone"
+                                                type="text"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.phonenumber || ""}
                                                 invalid={
-                                                    !!(validation.touched.phonenumber && validation.errors.phonenumber)
+                                                    !!(
+                                                        validation.touched.phonenumber &&
+                                                        validation.errors.phonenumber
+                                                    )
                                                 }
                                             />
-                                            {validation.touched.phonenumber && validation.errors.phonenumber ? (
-                                                <FormFeedback type="invalid">
-                                                    {validation.errors.phonenumber}
-                                                </FormFeedback>
-                                            ) : null}
+                                            {validation.touched.phonenumber &&
+                                                validation.errors.phonenumber && (
+                                                    <FormFeedback type="invalid">
+                                                        {validation.errors.phonenumber}
+                                                    </FormFeedback>
+                                                )}
                                         </div>
+
+                                        {/* کد پرسنلی */}
                                         <div className="mb-3">
-                                            <Label> شماره پرسنلی </Label>
+                                            <Label>شماره پرسنلی</Label>
                                             <Input
                                                 name="Personnelcode"
                                                 type="number"
@@ -501,17 +513,23 @@ const EmployeesList = () => {
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.Personnelcode || ""}
                                                 invalid={
-                                                    !!(validation.touched.Personnelcode && validation.errors.Personnelcode)
+                                                    !!(
+                                                        validation.touched.Personnelcode &&
+                                                        validation.errors.Personnelcode
+                                                    )
                                                 }
                                             />
-                                            {validation.touched.Personnelcode && validation.errors.Personnelcode ? (
-                                                <FormFeedback type="invalid">
-                                                    {validation.errors.Personnelcode}
-                                                </FormFeedback>
-                                            ) : null}
+                                            {validation.touched.Personnelcode &&
+                                                validation.errors.Personnelcode && (
+                                                    <FormFeedback type="invalid">
+                                                        {validation.errors.Personnelcode}
+                                                    </FormFeedback>
+                                                )}
                                         </div>
+
+                                        {/* تاریخ تولد (DatePicker) */}
                                         <div className="mb-3 d-flex flex-column">
-                                            <Label htmlFor="formrow-firstname-Input"> تاریخ تولد</Label>
+                                            <Label>تاریخ تولد</Label>
                                             <DatePicker
                                                 calendar={persian}
                                                 locale={persian_fa}
@@ -521,29 +539,36 @@ const EmployeesList = () => {
                                                 id="formrow-birthday"
                                                 value={validation.values.birthday}
                                                 onChange={(value) => {
-                                                    // value ممکن است یک DateObject یا آرایه باشد
-                                                    // بسته به این که چندتایی انتخاب می‌کنید یا نه
                                                     if (!value) {
                                                         validation.setFieldValue("birthday", "");
                                                     } else {
-                                                        // فرمت میلادی یا شمسی که می‌خواهید در state باشد
-                                                        validation.setFieldValue("birthday", value.format("YYYY-MM-DD"));
+                                                        validation.setFieldValue(
+                                                            "birthday",
+                                                            value.format("YYYY-MM-DD")
+                                                        );
                                                     }
                                                 }}
                                                 className={`form-control ${
-                                                    validation.touched.birthday && validation.errors.birthday ? "is-invalid" : ""
+                                                    validation.touched.birthday &&
+                                                    validation.errors.birthday
+                                                        ? "is-invalid"
+                                                        : ""
                                                 }`}
                                                 style={{ height: "38px", width: "100%" }}
                                             />
-                                            {validation.errors.birthday && validation.touched.birthday && (
-                                                <FormFeedback type="invalid">{validation.errors.birthday}</FormFeedback>
-                                            )}
+                                            {validation.errors.birthday &&
+                                                validation.touched.birthday && (
+                                                    <FormFeedback type="invalid">
+                                                        {validation.errors.birthday}
+                                                    </FormFeedback>
+                                                )}
                                         </div>
+
+                                        {/* ایمیل */}
                                         <div className="mb-3">
                                             <Label>ایمیل</Label>
                                             <Input
                                                 name="email"
-                                                label="ایمیل"
                                                 type="email"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
@@ -552,24 +577,26 @@ const EmployeesList = () => {
                                                     !!(validation.touched.email && validation.errors.email)
                                                 }
                                             />
-                                            {validation.touched.email && validation.errors.email ? (
+                                            {validation.touched.email && validation.errors.email && (
                                                 <FormFeedback type="invalid">
-                                                    {" "}
-                                                    {validation.errors.email}{" "}
+                                                    {validation.errors.email}
                                                 </FormFeedback>
-                                            ) : null}
+                                            )}
                                         </div>
+
+
+                                        {/* تیم (Team) */}
                                         <div className="mb-3">
                                             <Label>تیم (Team)</Label>
                                             <select
-                                                name="team_id" // هم‌نام با schema
+                                                name="team_id"
                                                 className="form-select"
                                                 onChange={validation.handleChange}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.team_id || ""}
                                             >
                                                 <option value="">انتخاب کنید</option>
-                                                {options.teams && options.teams.map((team) => (
+                                                {options?.teams?.map((team) => (
                                                     <option key={team.ID} value={team.ID}>
                                                         {team.Name}
                                                     </option>
@@ -582,7 +609,7 @@ const EmployeesList = () => {
                                             )}
                                         </div>
 
-
+                                        {/* وضعیت همکاری */}
                                         <div className="mb-3">
                                             <Label>وضعیت همکاری</Label>
                                             <select
@@ -593,21 +620,24 @@ const EmployeesList = () => {
                                                 value={validation.values.employment_status_id || ""}
                                             >
                                                 <option value="">انتخاب کنید</option>
-                                                {options.employmentStatuses && options.employmentStatuses.map((item) => (
+                                                {options?.employmentStatuses?.map((item) => (
                                                     <option key={item.id} value={item.id}>
-                                                        {item.name}
+                                                        {item.status}
+                                                        {/* یا item.name اگر فیلد name دارید */}
                                                     </option>
                                                 ))}
                                             </select>
-                                            {validation.errors.employment_status_id && validation.touched.employment_status_id && (
-                                                <FormFeedback type="invalid">
-                                                    {validation.errors.employment_status_id}
-                                                </FormFeedback>
-                                            )}
+                                            {validation.errors.employment_status_id &&
+                                                validation.touched.employment_status_id && (
+                                                    <FormFeedback type="invalid">
+                                                        {validation.errors.employment_status_id}
+                                                    </FormFeedback>
+                                                )}
                                         </div>
 
+                                        {/* واحد (Unit) */}
                                         <div className="mb-3">
-                                            <Label>واحد (Unit)</Label>
+                                            <Label>واحد</Label>
                                             <select
                                                 name="unit_id"
                                                 className="form-select"
@@ -616,7 +646,7 @@ const EmployeesList = () => {
                                                 value={validation.values.unit_id || ""}
                                             >
                                                 <option value="">انتخاب کنید</option>
-                                                {options.units && options.units.map((unit) => (
+                                                {options?.units?.map((unit) => (
                                                     <option key={unit.ID} value={unit.ID}>
                                                         {unit.Name}
                                                     </option>
@@ -628,6 +658,8 @@ const EmployeesList = () => {
                                                 </FormFeedback>
                                             )}
                                         </div>
+
+                                        {/* سمت شغلی */}
                                         <div className="mb-3">
                                             <Label>سمت شغلی</Label>
                                             <Input
@@ -638,13 +670,13 @@ const EmployeesList = () => {
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.position_chart || ""}
                                             />
-                                            {validation.touched.position_chart && validation.errors.position_chart ? (
-                                                <FormFeedback type="invalid">
-                                                    {validation.errors.position_chart}
-                                                </FormFeedback>
-                                            ) : null}
+                                            {validation.touched.position_chart &&
+                                                validation.errors.position_chart && (
+                                                    <FormFeedback type="invalid">
+                                                        {validation.errors.position_chart}
+                                                    </FormFeedback>
+                                                )}
                                         </div>
-
                                     </Col>
                                 </Row>
                                 <Row>
@@ -655,8 +687,7 @@ const EmployeesList = () => {
                                                 color="success"
                                                 className="save-user"
                                             >
-                                                {" "}
-                                                {!!isEdit ? "ویرایش" : "افزودن"}{" "}
+                                                {isEdit ? "ویرایش" : "افزودن"}
                                             </Button>
                                         </div>
                                     </Col>
