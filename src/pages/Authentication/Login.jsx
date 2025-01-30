@@ -178,9 +178,9 @@ const Login = (props) => {
                 <div className="mt-5 text-center">
                   <p>
                     حسابی ندارید؟{" "}
-                    <p className="fw-medium text-primary">
+                    <span className="fw-medium text-primary">
                       با واحد منابع انسانی ارتباط بگیرید
-                    </p>
+                    </span>
                   </p>
                   <p>
                      پگاه داده کاوان شریف

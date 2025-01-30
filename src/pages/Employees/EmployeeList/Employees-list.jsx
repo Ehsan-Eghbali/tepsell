@@ -5,10 +5,6 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import withRouter from "../../../components/Common/withRouter";
 import TableContainer from "../../../components/Common/TableContainer";
-<<<<<<< HEAD
-import Spinners from "../../../components/Common/Spinner"
-import { Card,CardBody,Col,Container,Row,Modal,ModalHeader,ModalBody,Label,FormFeedback,Input,Form,Button,} from "reactstrap";
-=======
 import Spinners from "../../../components/Common/Spinner";
 import {
     Card,
@@ -25,7 +21,6 @@ import {
     Form,
     Button,
 } from "reactstrap";
->>>>>>> b39ec0180b1b16f98720339b3352280dd842226c
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -258,26 +253,8 @@ const EmployeesList = () => {
                 enableSorting: true,
             },
             {
-<<<<<<< HEAD
-                header: 'واحد',
-                accessorKey: 'unit',
-                enableColumnFilter: false,
-                enableSorting: true,
-                cell: (cell) => {
-                    const value = cell.getValue();
-                    return (
-                        <div>
-                            {Array.isArray(value) ? value.map((item, index) => (
-                                <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
-                                    key={index}>{item}</Link>
-                            )) : null}
-                        </div>
-                    );
-                },
-=======
                 header: "ایمیل",
                 accessorKey: "email",
->>>>>>> b39ec0180b1b16f98720339b3352280dd842226c
             },
             {
                 header: "تاریخ تولد",
@@ -285,35 +262,9 @@ const EmployeesList = () => {
                 enableSorting: true,
                 cell: (cell) => {
                     const birthDate = cell.getValue();
-<<<<<<< HEAD
-                    return (
-                        <div>
-                            {birthDate ? new Date(birthDate).toLocaleDateString('fa-IR') : 'نامشخص'}
-                        </div>
-                    );
-                },
-            },
-            
-            {
-                header: 'وضعیت همکاری ',
-                accessorKey: 'employment_status',
-                enableColumnFilter: false,
-                enableSorting: false,
-                cell: (cell) => {
-                    const value = cell.getValue();
-                    return (
-                        <div>
-                            {Array.isArray(value) ? value.map((item, index) => (
-                                <Link to="#1" className="badge badge-soft-primary font-size-11 m-1"
-                                    key={index}>{item}</Link>
-                            )) : null}
-                        </div>
-                    );
-=======
                     // اگر تاریخ به فرمت شمسی در دیتابیس باشد، مستقیم نمایش دهید
                     // یا می‌توانید تبدیل کنید
                     return <div>{birthDate || "نامشخص"}</div>;
->>>>>>> b39ec0180b1b16f98720339b3352280dd842226c
                 },
             },
             {
