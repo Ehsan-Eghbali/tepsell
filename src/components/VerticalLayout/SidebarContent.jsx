@@ -156,7 +156,7 @@ const SidebarContent = (props) => {
                   <Link to="/addteam">{props.t("افزودن تیم ")}</Link>
                 </li>
                 <li>
-                  <Link to="/employees-List">{props.t("افزودن واحد ")}</Link>
+                  <Link to="/addunit">{props.t("افزودن واحد ")}</Link>
                 </li>
                 {/*<li>*/}
                 {/*  <Link to="/employee-grid">*/}

@@ -21,6 +21,9 @@ import Dashboard from "./dashboard/reducer";
 //Dasboard job
 import DashboardJob from "./dashboard-jobs/reducer";
 
+//managment
+import addUnit from "./managment/addunit/reducer";
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -36,7 +39,8 @@ const rootReducer = combineReducers({
   contacts,
   Dashboard,
 
-  DashboardJob
+  DashboardJob,
+  addUnit
 });
 
 export default rootReducer;

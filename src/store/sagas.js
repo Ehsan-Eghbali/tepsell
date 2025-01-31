@@ -10,7 +10,7 @@ import jobsSaga from "./jobs/saga";
 import contactsSaga from "./employee/saga";
 import dashboardSaga from "./dashboard/saga";
 import dashboardJobSaga from "./dashboard-jobs/saga";
-
+import unitSaga from './managment/addunit/saga';
 export default function* rootSaga() {
   yield all([
     //public
@@ -25,6 +25,7 @@ export default function* rootSaga() {
     fork(contactsSaga),
     fork(dashboardSaga),
 
-    fork(dashboardJobSaga)
+    fork(dashboardJobSaga),
+    fork(unitSaga)
   ]);
 }

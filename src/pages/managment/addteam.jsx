@@ -1,11 +1,11 @@
-import BreadCrumb from '../../components/Common/BreadCrumb';
+import BreadCrumb from "../../components/Common/Breadcrumb";
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import withRouter from "../../components/Common/withRouter";
 
 
 const addteam = (props) => {
-    document.title = "Index | Skote - قالب مدیریتی و داشبورد react" // or "Index | Skote - قالب مدیریتی و داشبورد Vite React "
+    document.title = "افزودن تیم" // or "Index | Skote - قالب مدیریتی و داشبورد Vite React "
     return (
         <div className="page-content">
             <React.Fragment>

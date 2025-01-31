@@ -21,3 +21,6 @@ export * from "./dashboard/actions";
 
 //dashboard-jobs
 export * from "./dashboard-jobs/actions";
+
+//managment
+export * from "./managment/addunit/action";

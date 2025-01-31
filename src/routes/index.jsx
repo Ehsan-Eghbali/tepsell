@@ -9,6 +9,7 @@ import Profile from "../pages/profile/Profile";
 
 //  //  managment
 import AddTeam from "../pages/managment/addteam";
+import AddUnit from "../pages/managment/addunit";
 
 // //Employees
 import EmployeeList from "../pages/Employees/EmployeeList/Employees-list";
@@ -23,10 +24,11 @@ const authProtectedRoutes = [
 
   //   //Utility
   { path: "/", exact: true, component: <Navigate to="/" /> },
-  { path: "/logout", component: <Logout /> },
+  { path: "/", exact: true, component: <Navigate to="/profile" /> },
 
+  // Management
   { path: "/addteam", component: <AddTeam /> },
-
+  { path: "/addunit", component: <AddUnit /> },
 ];
 
 const publicRoutes = [
