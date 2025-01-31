@@ -18,6 +18,7 @@ import {
         return { ...state, loading: true };
       case FETCH_UNITS_SUCCESS:
         return { ...state, loading: false, units: action.payload };
+
       case FETCH_UNITS_FAILURE:
         return { ...state, loading: false, error: action.payload };
   

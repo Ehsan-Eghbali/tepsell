@@ -8,7 +8,7 @@ import Logout from "../pages/Authentication/Logout";
 import Profile from "../pages/profile/Profile";
 
 //  //  managment
-import AddTeam from "../pages/managment/addteam";
+// import AddTeam from "../pages/managment/addteam";
 import AddUnit from "../pages/managment/addunit";
 
 // //Employees
@@ -27,7 +27,7 @@ const authProtectedRoutes = [
   { path: "/", exact: true, component: <Navigate to="/profile" /> },
 
   // Management
-  { path: "/addteam", component: <AddTeam /> },
+  // { path: "/addteam", component: <AddTeam /> },
   { path: "/addunit", component: <AddUnit /> },
 ];
 

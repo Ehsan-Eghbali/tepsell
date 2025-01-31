@@ -17,12 +17,14 @@ const API_BASE_URL = 'https://hrtapsell.ir/api/unit';
 function* fetchUnitsSaga() {
   try {
     const response = yield call(axios.get, `${API_BASE_URL}/getAll`);
-    console.log(response)
-    yield put(FETCH_UNITS_SUCCESS(response.data));
+    console.log("API Response:", response.data);
+    yield put({ type: FETCH_UNITS_SUCCESS, payload: response.data });
   } catch (error) {
+    console.error("Fetch Error:", error.message);
     yield put({ type: FETCH_UNITS_FAILURE, payload: error.message });
   }
 }
+
 
 function* addUnitSaga(action) {
   try {
